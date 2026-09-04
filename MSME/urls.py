@@ -1,30 +1,55 @@
-"""
-URL configuration for MSME project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.shortcuts import render
 
 
-def dashboard(request):
+def home(request):
     return render(request, 'index.html')
 
 
+def products(request):
+    return render(request, 'pages/products.html')
+
+
+def categories(request):
+    return render(request, 'pages/categories.html')
+
+
+def about(request):
+    return render(request, 'pages/about.html')
+
+
+def contact(request):
+    return render(request, 'pages/contact.html')
+
+
+def login_view(request):
+    return render(request, 'accounts/login.html')
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', dashboard, name='dashboard'),
+
+    path(
+        'admin/',
+        admin.site.urls
+    ),
+
+    path(
+        '',
+        home,
+        name='home'
+    ),
+
+    path(
+        'accounts/',
+        include('accounts.urls')
+    ),
+    path('products/', products, name='products'),
+
+    path('categories/', categories, name='categories'),
+
+    path('about/', about, name='about'),
+
+    path('contact/', contact, name='contact'),
+
+    path('login/', login_view, name='login'),
 ]

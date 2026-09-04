@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Products | My Store
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <h1 class="text-center mb-4">
+        Our Products
+    </h1>
+
+    <div class="row">
+
+        <!-- Product 1 -->
+        <div class="col-md-4 mb-4">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Product Name
+                    </h5>
+
+                    <p class="card-text">
+                        Product description goes here.
+                    </p>
+
+                    <p class="fw-bold">
+                        Rs. 1,000
+                    </p>
+
+                    <button class="btn btn-primary">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

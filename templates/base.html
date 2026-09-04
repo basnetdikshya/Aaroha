@@ -1,0 +1,520 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="AAROHA - Smart grocery and daily-life marketplace.">
+
+    <meta name="theme-color"
+          content="#1F5D42">
+
+    <title>
+        {% block title %}
+            AAROHA
+        {% endblock %}
+    </title>
+
+
+    <!-- GOOGLE FONT - INTER -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+          rel="stylesheet">
+
+
+    <!-- CUSTOM AAROHA CSS -->
+
+    <link rel="stylesheet"
+          href="{% static 'css/app.css' %}">
+
+
+    <!-- EXTRA PAGE CSS -->
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- SITE HEADER / NAVBAR -->
+
+<header class="site-header">
+
+    <nav class="navbar">
+
+        <div class="navbar-container">
+
+
+            <!-- LOGO -->
+
+            <a href="{% url 'home' %}"
+               class="brand-logo"
+               aria-label="AAROHA Home">
+
+                {% if logo %}
+
+                    <img src="{{ logo.url }}"
+                         alt="AAROHA Logo"
+                         class="logo">
+
+                {% else %}
+
+                    <span class="logo-text">
+                        AAROHA
+                    </span>
+
+                {% endif %}
+
+            </a>
+
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button type="button"
+                    class="mobile-menu-button"
+                    id="mobileMenuButton"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </button>
+
+
+            <!-- MAIN NAVIGATION -->
+
+            <div class="navbar-menu"
+                 id="navbarMenu">
+
+                <ul class="nav-list">
+
+                    <li class="nav-item">
+
+                        <a href="{% url 'home' %}"
+                           class="nav-link {% block nav_home %}{% endblock %}">
+
+                            Home
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a href="{% url 'products' %}"
+                           class="nav-link {% block nav_products %}{% endblock %}">
+
+                            Shop
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a href="{% url 'categories' %}"
+                           class="nav-link {% block nav_categories %}{% endblock %}">
+
+                            Categories
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a href="{% url 'products' %}"
+                           class="nav-link">
+
+                            Offers
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a href="{% url 'about' %}"
+                           class="nav-link {% block nav_about %}{% endblock %}">
+
+                            About
+
+                        </a>
+
+                    </li>
+
+
+                    <li class="nav-item">
+
+                        <a href="{% url 'contact' %}"
+                           class="nav-link {% block nav_contact %}{% endblock %}">
+
+                            Contact
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- NAVBAR ACTIONS -->
+
+                <div class="navbar-actions">
+
+
+                    <!-- SEARCH -->
+
+                    <a href="{% url 'products' %}"
+                       class="nav-action"
+                       aria-label="Search products">
+
+                        <svg width="20"
+                             height="20"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <circle cx="11"
+                                    cy="11"
+                                    r="7"></circle>
+
+                            <line x1="16.65"
+                                  y1="16.65"
+                                  x2="21"
+                                  y2="21"></line>
+
+                        </svg>
+
+                    </a>
+
+
+                    <!-- CART -->
+
+                    <a href="#"
+                       class="nav-action cart-action"
+                       aria-label="Shopping cart">
+
+                        <svg width="20"
+                             height="20"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <circle cx="9"
+                                    cy="20"
+                                    r="1"></circle>
+
+                            <circle cx="18"
+                                    cy="20"
+                                    r="1"></circle>
+
+                            <path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 8H6"></path>
+
+                        </svg>
+
+
+                        {% if cart_count %}
+
+                            <span class="cart-count">
+                                {{ cart_count }}
+                            </span>
+
+                        {% endif %}
+
+                    </a>
+
+
+                    <!-- LOGIN / ACCOUNT -->
+
+                    <a href="{% url 'login' %}"
+                       class="nav-action"
+                       aria-label="Account">
+
+                        <svg width="20"
+                             height="20"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2">
+
+                            <circle cx="12"
+                                    cy="8"
+                                    r="4"></circle>
+
+                            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
+
+                        </svg>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<!-- MAIN CONTENT -->
+
+<main id="main-content">
+
+    {% block content %}
+    {% endblock %}
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+
+        <!-- FOOTER BRAND -->
+
+        <div class="footer-column footer-brand">
+
+            <a href="{% url 'home' %}"
+               class="footer-logo">
+
+                AAROHA
+
+            </a>
+
+
+            <p class="footer-description">
+
+                Fresh, trusted and convenient shopping
+                for your everyday needs.
+
+            </p>
+
+
+            <div class="footer-social">
+
+                <a href="#"
+                   aria-label="Facebook"
+                   class="social-link">
+
+                    f
+
+                </a>
+
+
+                <a href="#"
+                   aria-label="Instagram"
+                   class="social-link">
+
+                    ig
+
+                </a>
+
+
+                <a href="#"
+                   aria-label="TikTok"
+                   class="social-link">
+
+                    tk
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK LINKS -->
+
+        <div class="footer-column">
+
+            <h3 class="footer-heading">
+                Quick Links
+            </h3>
+
+
+            <ul class="footer-links">
+
+                <li>
+                    <a href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'products' %}">
+                        Shop
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'categories' %}">
+                        Categories
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'about' %}">
+                        About Us
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'contact' %}">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- CUSTOMER SERVICE -->
+
+        <div class="footer-column">
+
+            <h3 class="footer-heading">
+                Customer Service
+            </h3>
+
+
+            <ul class="footer-links">
+
+                <li>
+                    <a href="#">
+                        My Account
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        My Orders
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Delivery Information
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Privacy Policy
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        Terms & Conditions
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- CONTACT -->
+
+        <div class="footer-column">
+
+            <h3 class="footer-heading">
+                Contact Us
+            </h3>
+
+
+            <div class="footer-contact">
+
+                <p>
+                    <strong>Email</strong><br>
+                    info@aaroha.com
+                </p>
+
+
+                <p>
+                    <strong>Phone</strong><br>
+                    +977-98XXXXXXXX
+                </p>
+
+
+                <p>
+                    <strong>Location</strong><br>
+                    Nepal
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER BOTTOM -->
+
+    <div class="footer-bottom">
+
+        <div class="footer-bottom-container">
+
+            <p>
+                &copy; {% now "Y" %} AAROHA.
+                All Rights Reserved.
+            </p>
+
+
+            <p>
+                Built for smarter everyday shopping.
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+
+<script src="{% static 'js/app.js' %}"></script>
+
+
+<!-- EXTRA PAGE JAVASCRIPT -->
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>

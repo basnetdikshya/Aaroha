@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Categories | My Store
+{% endblock %}
+
+{% block content %}
+
+<section class="container py-5">
+
+    <h1 class="text-center mb-4">
+        Product Categories
+    </h1>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Electronics</h4>
+                    <p>Explore electronic products.</p>
+                    <a href="{% url 'products' %}"
+                       class="btn btn-primary">
+                        View Products
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Clothing</h4>
+                    <p>Explore clothing products.</p>
+                    <a href="{% url 'products' %}"
+                       class="btn btn-primary">
+                        View Products
+                    </a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4>Accessories</h4>
+                    <p>Explore accessories.</p>
+                    <a href="{% url 'products' %}"
+                       class="btn btn-primary">
+                        View Products
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

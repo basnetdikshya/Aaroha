@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Dashboard | Aaroha</title>
+
+</head>
+
+
+<body>
+
+    <h1>Customer Dashboard</h1>
+
+    <h2>
+        Welcome, {{ request.user.username }}
+    </h2>
+
+    <p>
+        You are logged in as Customer.
+    </p>
+
+    <hr>
+
+    <h3>Customer Functions</h3>
+
+    <ul>
+        <li>Browse Products</li>
+        <li>Shopping Cart</li>
+        <li>Place Orders</li>
+        <li>Order History</li>
+        <li>Track Delivery</li>
+        <li>Manage Profile</li>
+    </ul>
+
+    <br>
+
+    <a href="{% url 'logout' %}">
+        Logout
+    </a>
+
+</body>
+{% load static %}
+
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/customer.js' %}"></script>
+</html>

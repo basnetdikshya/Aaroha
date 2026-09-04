@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Delivery Rider Dashboard | Aaroha</title>
+
+</head>
+
+
+<body>
+
+    <h1>Delivery Rider Dashboard</h1>
+
+    <h2>
+        Welcome, {{ request.user.username }}
+    </h2>
+
+    <p>
+        You are logged in as Delivery Rider.
+    </p>
+
+    <hr>
+
+    <h3>Rider Functions</h3>
+
+    <ul>
+        <li>Assigned Deliveries</li>
+        <li>Customer Locations</li>
+        <li>Delivery Status</li>
+        <li>Delivery History</li>
+        <li>Update Delivery</li>
+    </ul>
+
+    <br>
+
+    <a href="{% url 'logout' %}">
+        Logout
+    </a>
+
+</body>
+{% load static %}
+
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/rider.js' %}"></script>
+</html>
