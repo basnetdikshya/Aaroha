@@ -1290,3 +1290,378 @@ textarea:focus-visible {
     outline-offset: 2px;
 
 }
+
+
+
+
+/* =========================================================
+   AAROHA HOME PAGE
+   FINAL SPACING & ALIGNMENT
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL CONTAINER
+   ========================================================= */
+
+.container {
+    width: 100%;
+    max-width: 1440px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+
+.hero-section {
+    width: 100%;
+
+    background: #FAF8F2;
+
+    margin: 0;
+    padding: 48px 0 32px;
+}
+
+
+.hero-content {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+.hero-text {
+    max-width: 760px;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================================
+   HERO LABEL
+   ========================================================= */
+
+.hero-label {
+    display: block;
+
+    margin: 0 0 8px;
+
+    color: #26332D;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   HERO HEADING
+   ========================================================= */
+
+.hero-text h1 {
+    margin: 0 0 12px;
+
+    color: #26332D;
+
+    font-size: 36px;
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+   ========================================================= */
+
+.hero-text p {
+    max-width: 720px;
+
+    margin: 0 0 24px;
+
+    color: #718078;
+
+    font-size: 17px;
+    font-weight: 400;
+
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   HERO BUTTONS
+   ========================================================= */
+
+.hero-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Common button */
+
+.hero-actions .btn {
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 18px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    line-height: 1;
+
+    text-decoration: none;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* Primary button */
+
+.hero-actions .btn-primary {
+    background: #1F5D42;
+
+    color: #FFFFFF;
+
+    border: 1px solid #1F5D42;
+}
+
+
+.hero-actions .btn-primary:hover {
+    background: #174832;
+
+    border-color: #174832;
+
+    transform: translateY(-1px);
+}
+
+
+/* Secondary button */
+
+.hero-actions .btn-secondary {
+    background: #E8F3EC;
+
+    color: #1F5D42;
+
+    border: 1px solid #DDE5DF;
+}
+
+
+.hero-actions .btn-secondary:hover {
+    background: #DCEDE2;
+
+    border-color: #7BAE8A;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   WELCOME SECTION
+   ========================================================= */
+
+.welcome-section {
+    width: 100%;
+
+    margin: 0;
+    padding: 0 0 48px;
+
+    background: #FAF8F2;
+}
+
+
+/* =========================================================
+   WELCOME CARD
+   ========================================================= */
+
+.welcome-section .card {
+    width: 100%;
+
+    margin: 0;
+
+    padding: 28px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #DDE5DF;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 2px 8px rgba(38, 51, 45, 0.06);
+}
+
+
+/* Welcome heading */
+
+.welcome-section .card h2 {
+    margin: 0 0 6px;
+
+    color: #26332D;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+
+/* Welcome paragraph */
+
+.welcome-section .card p {
+    margin: 0;
+
+    color: #718078;
+
+    font-size: 17px;
+    font-weight: 400;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1023px) {
+
+    .container {
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+
+    .hero-section {
+        padding-top: 40px;
+        padding-bottom: 28px;
+    }
+
+    .hero-text h1 {
+        font-size: 34px;
+    }
+
+    .hero-text p {
+        font-size: 16px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+
+    /* Hero */
+
+    .hero-section {
+        padding-top: 32px;
+        padding-bottom: 24px;
+    }
+
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+
+    .hero-label {
+        margin-bottom: 8px;
+
+        font-size: 14px;
+    }
+
+
+    .hero-text h1 {
+        margin-bottom: 12px;
+
+        font-size: 28px;
+
+        line-height: 1.3;
+    }
+
+
+    .hero-text p {
+        margin-bottom: 20px;
+
+        font-size: 14px;
+
+        line-height: 1.55;
+    }
+
+
+    /* Buttons */
+
+    .hero-actions {
+        gap: 10px;
+
+        flex-wrap: wrap;
+    }
+
+
+    .hero-actions .btn {
+        min-height: 44px;
+
+        padding: 10px 16px;
+    }
+
+
+    /* Welcome */
+
+    .welcome-section {
+        padding-bottom: 32px;
+    }
+
+
+    .welcome-section .card {
+        padding: 20px;
+    }
+
+
+    .welcome-section .card h2 {
+        font-size: 24px;
+    }
+
+
+    .welcome-section .card p {
+        font-size: 14px;
+    }
+
+}
