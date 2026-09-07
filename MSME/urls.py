@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
-
+from accounts import views  
 
 def home(request):
     return render(request, 'index.html')

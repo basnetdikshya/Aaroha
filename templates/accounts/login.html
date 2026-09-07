@@ -70,7 +70,7 @@ Login | AAROHA
                  LOGIN FORM
             ================================================== -->
 
-            <form method="POST">
+            <form method="POST"action="{% url 'login' %}">
 
                 {% csrf_token %}
 
@@ -176,6 +176,9 @@ Login | AAROHA
                 >
                     Login
                 </button>
+               {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
 
             </form>
 
