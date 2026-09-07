@@ -52,4 +52,5 @@ urlpatterns = [
         views.rider_dashboard,
         name='rider_dashboard'
     ),
+   
 ]

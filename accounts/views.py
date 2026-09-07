@@ -11,28 +11,65 @@ from .models import UserProfile
 
 def login_view(request):
 
+    # If user is already logged in, send them to their dashboard
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('owner_dashboard')
+
+        try:
+            profile = UserProfile.objects.get(user=request.user)
+            return redirect_user_by_role(profile.role)
+
+        except UserProfile.DoesNotExist:
+            logout(request)
+            return render(
+                request,
+                'accounts/login.html',
+                {
+                    'error': 'No role has been assigned to this user.'
+                }
+            )
+
+    # Handle login form submission
     if request.method == 'POST':
 
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
 
+        # Check empty fields
+        if not username or not password:
+            return render(
+                request,
+                'accounts/login.html',
+                {
+                    'error': 'TEST: Invalid username or password.',
+                    'username': username
+                }
+            )
+
+        # Authenticate user
         user = authenticate(
             request,
             username=username,
             password=password
         )
 
+        # =================================================
+        # SUCCESSFUL LOGIN
+        # =================================================
+
         if user is not None:
 
             login(request, user)
 
-            # Superuser is treated as Owner
+            # Superuser = Owner
             if user.is_superuser:
                 return redirect('owner_dashboard')
 
-            # Get user's profile and role
+            # Get user's profile
             try:
                 profile = UserProfile.objects.get(user=user)
+
             except UserProfile.DoesNotExist:
 
                 logout(request)
@@ -41,7 +78,8 @@ def login_view(request):
                     request,
                     'accounts/login.html',
                     {
-                        'error': 'No role has been assigned to this user.'
+                        'error': 'No role has been assigned to this user.',
+                        'username': username
                     }
                 )
 
@@ -64,25 +102,34 @@ def login_view(request):
             elif role == 'rider':
                 return redirect('rider_dashboard')
 
-            # If role is invalid
+            # Invalid role
             logout(request)
 
             return render(
                 request,
                 'accounts/login.html',
                 {
-                    'error': 'Invalid user role.'
+                    'error': 'Invalid user role.',
+                    'username': username
                 }
             )
 
-        # Wrong username/password
+        # =================================================
+        # WRONG USERNAME OR PASSWORD
+        # =================================================
+
         return render(
             request,
             'accounts/login.html',
             {
-                'error': 'Invalid username or password.'
+                'error': 'Invalid username or password.',
+                'username': username
             }
         )
+
+    # =====================================================
+    # NORMAL GET REQUEST
+    # =====================================================
 
     return render(
         request,
@@ -112,23 +159,25 @@ def owner_dashboard(request):
     if request.user.is_superuser:
         return render(
             request,
-            'dashboards/owner.html'
+            'dashboard/owner.html'
         )
 
-    # Check normal user's role
     try:
         profile = UserProfile.objects.get(
             user=request.user
         )
+
     except UserProfile.DoesNotExist:
+        logout(request)
         return redirect('login')
 
+    # Only owner can access
     if profile.role != 'owner':
         return redirect_user_by_role(profile.role)
 
     return render(
         request,
-        'dashboards/owner.html'
+        'dashboard/owner.html'
     )
 
 
@@ -146,15 +195,18 @@ def staff_dashboard(request):
         profile = UserProfile.objects.get(
             user=request.user
         )
+
     except UserProfile.DoesNotExist:
+        logout(request)
         return redirect('login')
 
+    # Only staff can access
     if profile.role != 'staff':
         return redirect_user_by_role(profile.role)
 
     return render(
         request,
-        'dashboards/staff.html'
+        'dashboard/staff.html'
     )
 
 
@@ -172,15 +224,18 @@ def customer_dashboard(request):
         profile = UserProfile.objects.get(
             user=request.user
         )
+
     except UserProfile.DoesNotExist:
+        logout(request)
         return redirect('login')
 
+    # Only customer can access
     if profile.role != 'customer':
         return redirect_user_by_role(profile.role)
 
     return render(
         request,
-        'dashboards/customer.html'
+        'dashboard/customer.html'
     )
 
 
@@ -198,15 +253,18 @@ def supplier_dashboard(request):
         profile = UserProfile.objects.get(
             user=request.user
         )
+
     except UserProfile.DoesNotExist:
+        logout(request)
         return redirect('login')
 
+    # Only supplier can access
     if profile.role != 'supplier':
         return redirect_user_by_role(profile.role)
 
     return render(
         request,
-        'dashboards/supplier.html'
+        'dashboard/supplier.html'
     )
 
 
@@ -224,15 +282,18 @@ def rider_dashboard(request):
         profile = UserProfile.objects.get(
             user=request.user
         )
+
     except UserProfile.DoesNotExist:
+        logout(request)
         return redirect('login')
 
+    # Only rider can access
     if profile.role != 'rider':
         return redirect_user_by_role(profile.role)
 
     return render(
         request,
-        'dashboards/rider.html'
+        'dashboard/rider.html'
     )
 
 
