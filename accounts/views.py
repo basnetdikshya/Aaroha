@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,50 +12,18 @@ from .models import UserProfile
 def login_view(request):
 
     # -----------------------------------------------------
-    # If already logged in
+    # LOGIN FORM SUBMITTED
     # -----------------------------------------------------
-    if request.user.is_authenticated:
 
-        if request.user.is_superuser:
-            return redirect('owner_dashboard')
-
-        try:
-            profile = UserProfile.objects.get(
-                user=request.user
-            )
-
-            return redirect_user_by_role(profile.role)
-
-        except UserProfile.DoesNotExist:
-
-            logout(request)
-
-            return render(
-                request,
-                'accounts/login.html',
-                {
-                    'error': 'No role has been assigned to this user.'
-                }
-            )
-
-    # -----------------------------------------------------
-    # Login form submitted
-    # -----------------------------------------------------
     if request.method == 'POST':
 
-        username = request.POST.get(
-            'username',
-            ''
-        ).strip()
-
-        password = request.POST.get(
-            'password',
-            ''
-        )
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
 
         # -------------------------------------------------
-        # Empty fields
+        # Check empty fields
         # -------------------------------------------------
+
         if not username or not password:
 
             return render(
@@ -69,23 +36,19 @@ def login_view(request):
             )
 
         # -------------------------------------------------
-        # Authenticate
+        # Authenticate username and password
         # -------------------------------------------------
+
         user = authenticate(
             request,
             username=username,
             password=password
         )
 
-        print("========== LOGIN TEST ==========")
-        print("Username entered:", username)
-        print("Password entered:", password)
-        print("Authenticated user:", user)
-        print("================================")
-
         # -------------------------------------------------
         # Authentication failed
         # -------------------------------------------------
+
         if user is None:
 
             return render(
@@ -100,11 +63,13 @@ def login_view(request):
         # -------------------------------------------------
         # Authentication successful
         # -------------------------------------------------
+
         login(request, user)
 
         # -------------------------------------------------
-        # Superuser = Owner
+        # SUPERUSER = OWNER
         # -------------------------------------------------
+
         if user.is_superuser:
 
             return redirect('owner_dashboard')
@@ -112,6 +77,7 @@ def login_view(request):
         # -------------------------------------------------
         # Get UserProfile
         # -------------------------------------------------
+
         try:
 
             profile = UserProfile.objects.get(
@@ -132,13 +98,15 @@ def login_view(request):
             )
 
         # -------------------------------------------------
-        # Get role
+        # Get user's role
         # -------------------------------------------------
+
         role = profile.role
 
         # -------------------------------------------------
         # Redirect according to role
         # -------------------------------------------------
+
         if role == 'owner':
 
             return redirect('owner_dashboard')
@@ -162,6 +130,7 @@ def login_view(request):
         # -------------------------------------------------
         # Invalid role
         # -------------------------------------------------
+
         logout(request)
 
         return render(
@@ -174,8 +143,10 @@ def login_view(request):
         )
 
     # -----------------------------------------------------
-    # Normal GET request
+    # NORMAL GET REQUEST
+    # Always show login page
     # -----------------------------------------------------
+
     return render(
         request,
         'accounts/login.html'
@@ -200,6 +171,7 @@ def logout_view(request):
 @login_required
 def owner_dashboard(request):
 
+    # Superuser can access owner dashboard
     if request.user.is_superuser:
 
         return render(
@@ -207,6 +179,7 @@ def owner_dashboard(request):
             'dashboard/owner.html'
         )
 
+    # Get profile
     try:
 
         profile = UserProfile.objects.get(
@@ -219,6 +192,7 @@ def owner_dashboard(request):
 
         return redirect('login')
 
+    # Check role
     if profile.role != 'owner':
 
         return redirect_user_by_role(profile.role)
@@ -387,5 +361,5 @@ def redirect_user_by_role(role):
 
         return redirect('rider_dashboard')
 
+    # Unknown role
     return redirect('login')
-

@@ -8,203 +8,199 @@ Login | AAROHA
 
 <section class="login-section">
 
-    <div class="login-container">
+```
+<div class="login-container">
 
-        <!-- =====================================================
-             LEFT SIDE - WELCOME
-        ====================================================== -->
+    <!-- =====================================================
+         LEFT SIDE - WELCOME
+    ====================================================== -->
 
-        <div class="login-welcome">
+    <div class="login-welcome">
 
-            <div class="login-brand">
-                AAROHA
-            </div>
-
-            <h1>Welcome Back!</h1>
-
-            <p>
-                Login to your AAROHA account and continue
-                your smart and convenient shopping experience.
-            </p>
-
-            <div class="login-features">
-
-                <div class="login-feature">
-                    <span>✓</span>
-                    <p>Shop your favorite products</p>
-                </div>
-
-                <div class="login-feature">
-                    <span>✓</span>
-                    <p>Manage your orders easily</p>
-                </div>
-
-                <div class="login-feature">
-                    <span>✓</span>
-                    <p>Enjoy a simple shopping experience</p>
-                </div>
-
-            </div>
-
+        <div class="login-brand">
+            AAROHA
         </div>
 
+        <h1>Welcome Back!</h1>
 
-        <!-- =====================================================
-             RIGHT SIDE - LOGIN FORM
-        ====================================================== -->
+        <p>
+            Login to your AAROHA account and continue
+            your smart and convenient shopping experience.
+        </p>
 
-        <div class="login-form-container">
+        <div class="login-features">
 
-            <div class="login-form-header">
-
-                <h2>Login</h2>
-
-                <p>
-                    Enter your details to access your account.
-                </p>
-
+            <div class="login-feature">
+                <span>✓</span>
+                <p>Shop your favorite products</p>
             </div>
 
+            <div class="login-feature">
+                <span>✓</span>
+                <p>Manage your orders easily</p>
+            </div>
 
-            <!-- =================================================
-                 LOGIN FORM
-            ================================================== -->
-
-            <form method="POST"action="{% url 'login' %}">
-
-                {% csrf_token %}
-
-
-                <!-- ERROR MESSAGE -->
-
-                {% if error %}
-
-                    <div class="login-error">
-                        {{ error }}
-                    </div>
-
-                {% endif %}
-
-
-                <!-- USERNAME -->
-
-                <div class="login-input-group">
-
-                    <label for="username">
-                        Username
-                    </label>
-
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        placeholder="Enter your username"
-                        value="{{ username|default:'' }}"
-                        autocomplete="username"
-                        required
-                    >
-
-                </div>
-
-
-                <!-- PASSWORD -->
-
-                <div class="login-input-group">
-
-                    <label for="password">
-                        Password
-                    </label>
-
-                    <div class="password-wrapper">
-
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Enter your password"
-                            autocomplete="current-password"
-                            required
-                        >
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            onclick="togglePassword()"
-                            aria-label="Show password"
-                            id="passwordToggle"
-                        >
-                            👁
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- REMEMBER ME / FORGOT PASSWORD -->
-
-                <div class="login-options">
-
-                    <label class="remember-me">
-
-                        <input
-                            type="checkbox"
-                            name="remember"
-                        >
-
-                        <span>
-                            Remember me
-                        </span>
-
-                    </label>
-
-                    <a
-                        href="#"
-                        class="forgot-password"
-                    >
-                        Forgot Password?
-                    </a>
-
-                </div>
-
-
-                <!-- LOGIN BUTTON -->
-
-                <button
-                    type="submit"
-                    class="login-button"
-                >
-                    Login
-                </button>
-               {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
-
-            </form>
-
-
-            <!-- =================================================
-                 REGISTER LINK
-            ================================================== -->
-
-            <div class="register-link">
-
-                <span>
-                    Don't have an account?
-                </span>
-
-                <a href="#">
-                    Create an account
-                </a>
-
+            <div class="login-feature">
+                <span>✓</span>
+                <p>Enjoy a simple shopping experience</p>
             </div>
 
         </div>
 
     </div>
 
-</section>
 
+    <!-- =====================================================
+         RIGHT SIDE - LOGIN FORM
+    ====================================================== -->
+
+    <div class="login-form-container">
+
+        <div class="login-form-header">
+
+            <h2>Login</h2>
+
+            <p>
+                Enter your details to access your account.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             LOGIN FORM
+        ================================================== -->
+
+        <form method="POST" action="{% url 'login' %}">
+
+            {% csrf_token %}
+
+
+            <!-- Error Message -->
+
+            {% if error %}
+
+                <div class="login-error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <!-- Username -->
+
+            <div class="login-input-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    value="{{ username|default:'' }}"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="login-input-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="password-toggle"
+                        onclick="togglePassword()"
+                        aria-label="Show password"
+                        id="passwordToggle"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Remember Me / Forgot Password -->
+
+            <div class="login-options">
+
+                <label class="remember-me">
+
+                    <input
+                        type="checkbox"
+                        name="remember"
+                    >
+
+                    <span>
+                        Remember me
+                    </span>
+
+                </label>
+
+                <a
+                    href="#"
+                    class="forgot-password"
+                >
+                    Forgot Password?
+                </a>
+
+            </div>
+
+
+            <!-- Login Button -->
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                Login
+            </button>
+
+        </form>
+
+
+        <!-- Register -->
+
+        <div class="register-link">
+
+            <span>
+                Don't have an account?
+            </span>
+
+            <a href="#">
+                Create an account
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+```
+
+</section>
 
 <!-- =========================================================
      PASSWORD TOGGLE
