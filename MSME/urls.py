@@ -4,6 +4,7 @@ from django.shortcuts import render
 from accounts import views  
 from django.conf import settings
 from django.conf.urls.static import static
+from products.models import Category
 
 def home(request):
     return render(request, 'index.html')
@@ -14,9 +15,14 @@ def home(request):
 
 
 def categories(request):
-    return render(request, 'pages/categories.html')
+    # return render(request, 'pages/categories.html')
+    categories = Category.objects.all()
 
-
+    return render(
+        request,
+        'pages/categories.html',
+        {'categories': categories}
+    )
 def about(request):
     return render(request, 'pages/about.html')
 
