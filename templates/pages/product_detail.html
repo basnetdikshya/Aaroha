@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | {{ product.name }}
+{% endblock %}
+
+{% block content %}
+
+<section class="product-detail-section">
+
+    <div class="container">
+
+        <!-- Back Button -->
+        <a href="{% url 'products' %}" class="back-link">
+            ← Back to Products
+        </a>
+
+        <div class="product-detail">
+
+            <!-- =========================
+                 PRODUCT IMAGE
+            ========================== -->
+
+            <div class="product-detail-image">
+
+                {% if product.image %}
+
+                    <img
+                        src="{{ product.image.url }}"
+                        alt="{{ product.name }}"
+                    >
+
+                {% else %}
+
+                    <div class="product-image-placeholder">
+                        No Image
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =========================
+                 PRODUCT INFORMATION
+            ========================== -->
+
+            <div class="product-detail-info">
+
+                <!-- Category -->
+                <span class="product-category">
+                    {{ product.category.name }}
+                </span>
+
+
+                <!-- Product Name -->
+                <h1>
+                    {{ product.name }}
+                </h1>
+
+
+                <!-- Price -->
+                <div class="detail-price">
+                    Rs. {{ product.price }}
+                </div>
+
+
+                <!-- Unit -->
+                <div class="detail-unit">
+                    Per {{ product.unit }}
+                </div>
+
+
+                <!-- Description -->
+                <div class="detail-description">
+
+                    <h3>
+                        Product Description
+                    </h3>
+
+                    <p>
+                        {{ product.description }}
+                    </p>
+
+                </div>
+
+
+                <!-- Stock -->
+                <div class="stock-status">
+
+                    {% if product.stock > 0 %}
+
+                        <span class="in-stock">
+                            ✓ In Stock
+                        </span>
+
+                        <span>
+                            {{ product.stock }} available
+                        </span>
+
+                    {% else %}
+
+                        <span class="out-of-stock">
+                            ✕ Out of Stock
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- =========================
+                     ADD TO CART
+                ========================== -->
+
+                {% if product.stock > 0 %}
+
+                    <form
+                        method="POST"
+                        action="{% url 'add_to_cart' product.id %}"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <!-- Quantity -->
+                        <div class="quantity-section">
+
+                            <label for="quantity">
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                id="quantity"
+                                name="quantity"
+                                value="1"
+                                min="1"
+                                max="{{ product.stock }}"
+                            >
+
+                        </div>
+
+
+                        <!-- Add to Cart Button -->
+                        <button
+                            type="submit"
+                            class="add-cart-button"
+                        >
+                            Add to Cart
+                        </button>
+
+                    </form>
+
+                {% else %}
+
+                    <button
+                        type="button"
+                        class="add-cart-button disabled"
+                        disabled
+                    >
+                        Out of Stock
+                    </button>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

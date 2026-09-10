@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Shopping Cart
+{% endblock %}
+
+{% block content %}
+
+<section class="container">
+
+    <h1>Your Cart</h1>
+
+    {% if cart_items %}
+
+        {% for item in cart_items %}
+
+        <div class="cart-item">
+
+            {% if item.product.image %}
+                <img
+                    src="{{ item.product.image.url }}"
+                    alt="{{ item.product.name }}"
+                    width="120"
+                >
+            {% endif %}
+
+            <div>
+                <h3>{{ item.product.name }}</h3>
+
+                <p>
+                    Rs. {{ item.product.price }}
+                    ×
+                    {{ item.quantity }}
+                </p>
+
+                <strong>
+                    Rs. {{ item.subtotal }}
+                </strong>
+
+                <br><br>
+
+                <a href="{% url 'remove_from_cart' item.product.id %}">
+                    Remove
+                </a>
+            </div>
+
+        </div>
+
+        <hr>
+
+        {% endfor %}
+
+        <h2>
+            Total: Rs. {{ total }}
+        </h2>
+
+        <button>
+            Proceed to Checkout
+        </button>
+
+    {% else %}
+
+        <p>Your cart is empty.</p>
+
+        <a href="{% url 'products' %}">
+            Continue Shopping
+        </a>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}

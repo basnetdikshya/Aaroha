@@ -2,13 +2,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
 from accounts import views  
+from django.conf import settings
+from django.conf.urls.static import static
 
 def home(request):
     return render(request, 'index.html')
 
 
-def products(request):
-    return render(request, 'pages/products.html')
+# def products(request):
+#     return render(request, 'pages/products.html')
 
 
 def categories(request):
@@ -43,7 +45,8 @@ urlpatterns = [
         'accounts/',
         include('accounts.urls')
     ),
-    path('products/', products, name='products'),
+    # path('products/', products, name='products'),
+    path('products/', include('products.urls')),
 
     path('categories/', categories, name='categories'),
 
@@ -52,4 +55,8 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
 
     path('login/', login_view, name='login'),
+
+    path('cart/', include('cart.urls')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,45 +1,82 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Products | My Store
+AAROHA | Products
 {% endblock %}
 
 {% block content %}
 
-<section class="container py-5">
+<section class="products-section">
 
-    <h1 class="text-center mb-4">
-        Our Products
-    </h1>
+    <div class="container">
 
-    <div class="row">
+        <h1>Our Products</h1>
 
-        <!-- Product 1 -->
-        <div class="col-md-4 mb-4">
+        <div class="products-grid">
 
-            <div class="card">
+            {% for product in products %}
 
-                <div class="card-body">
+            <div class="product-card">
 
-                    <h5 class="card-title">
-                        Product Name
-                    </h5>
+                <!-- Product Image -->
+                {% if product.image %}
+                    <img
+                        src="{{ product.image.url }}"
+                        alt="{{ product.name }}"
+                    >
+                {% else %}
+                    <div class="product-image-placeholder">
+                        No Image
+                    </div>
+                {% endif %}
 
-                    <p class="card-text">
-                        Product description goes here.
+
+                <!-- Product Information -->
+                <div class="product-info">
+
+                    <!-- Category -->
+                    <span class="product-category">
+                        {{ product.category.name }}
+                    </span>
+
+                    <!-- Product Name -->
+                    <h3>
+                        <a href="{% url 'product_detail' product.pk %}">
+                            {{ product.name }}
+                        </a>
+                    </h3>
+
+                    <!-- Description -->
+                    <p>
+                        {{ product.description }}
                     </p>
 
-                    <p class="fw-bold">
-                        Rs. 1,000
-                    </p>
+                    <!-- Price -->
+                    <div class="product-price">
+                        Rs. {{ product.price }}
+                    </div>
 
-                    <button class="btn btn-primary">
+                    <!-- Unit -->
+                    <div class="product-unit">
+                        {{ product.unit }}
+                    </div>
+
+                    <!-- Add to Cart -->
+                    <button type="button">
                         Add to Cart
                     </button>
 
                 </div>
 
             </div>
+
+            {% empty %}
+
+                <p>
+                    No products available at the moment.
+                </p>
+
+            {% endfor %}
 
         </div>
 

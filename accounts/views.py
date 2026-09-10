@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
 from .models import UserProfile
-
+from django.contrib.auth import authenticate, login as auth_login
+from django.shortcuts import render, redirect
 
 # =========================================================
 # LOGIN
@@ -363,3 +363,48 @@ def redirect_user_by_role(role):
 
     # Unknown role
     return redirect('login')
+
+ROLE_HOME = {
+    'customer': 'customer_dashboard',
+    'admin': 'owner_dashboard',
+    'staff': 'staff_dashboard',
+    'rider': 'rider_dashboard',
+    'supplier': 'supplier_dashboard',
+}
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect(ROLE_HOME.get(request.user.profile.role, 'index'))
+
+    errors = {}
+    username = ''
+
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
+
+        if not username:
+            errors['username'] = 'Username is required.'
+        if not password:
+            errors['password'] = 'Password is required.'
+
+        if not errors:
+            user = authenticate(request, username=username, password=password)
+
+            if user is None:
+                errors['form'] = 'Incorrect username or password.'
+            elif not user.is_active:
+                errors['form'] = 'This account has been disabled. Contact support.'
+            else:
+                auth_login(request, user)
+
+                if not request.POST.get('remember'):
+                    request.session.set_expiry(0)
+
+                return redirect(ROLE_HOME.get(user.profile.role, 'index'))
+
+    return render(request, 'accounts/login.html', {
+        'errors': errors,
+        'username': username,
+    })
