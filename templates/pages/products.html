@@ -62,9 +62,43 @@ AAROHA | Products
                     </div>
 
                     <!-- Add to Cart -->
-                    <button type="button">
+                    <!-- <button type="button">
                         Add to Cart
-                    </button>
+                    </button> -->
+
+                    <!-- Add to Cart -->
+{% if product.stock > 0 %}
+
+<form method="POST" action="{% url 'add_to_cart' product.id %}" class="product-cart-form">
+
+    {% csrf_token %}
+
+    <div class="product-quantity">
+        <label for="quantity-{{ product.id }}">Quantity</label>
+
+        <input
+            type="number"
+            id="quantity-{{ product.id }}"
+            name="quantity"
+            value="1"
+            min="1"
+            max="{{ product.stock }}"
+        >
+    </div>
+
+    <button type="submit" class="add-cart-button">
+        Add to Cart
+    </button>
+
+</form>
+
+{% else %}
+
+<button type="button" class="add-cart-button disabled" disabled>
+    Out of Stock
+</button>
+
+{% endif %}
 
                 </div>
 

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Order Confirmed
+{% endblock %}
+
+{% block content %}
+
+<section class="order-success-section">
+
+    <div class="container">
+
+        <div class="order-success-card">
+
+            <div class="success-icon">
+                ✓
+            </div>
+
+            <span class="section-label">
+                ORDER CONFIRMED
+            </span>
+
+            <h1>Thank You for Your Order!</h1>
+
+            <p>
+                Your order has been successfully placed.
+            </p>
+
+            <div class="order-number">
+                Order #{{ order.id }}
+            </div>
+
+            <div class="order-details">
+
+                <div class="success-row">
+                    <span>Customer</span>
+                    <strong>{{ order.customer_name }}</strong>
+                </div>
+
+                <div class="success-row">
+                    <span>Phone</span>
+                    <strong>{{ order.phone }}</strong>
+                </div>
+
+                <div class="success-row">
+                    <span>Delivery Address</span>
+                    <strong>{{ order.address }}</strong>
+                </div>
+
+                <div class="success-row">
+                    <span>City</span>
+                    <strong>{{ order.city }}</strong>
+                </div>
+
+                <div class="success-row">
+                    <span>Total Amount</span>
+                    <strong>Rs. {{ order.total_amount }}</strong>
+                </div>
+
+                <div class="success-row">
+                    <span>Order Status</span>
+                    <strong>{{ order.status }}</strong>
+                </div>
+
+            </div>
+
+            <div class="success-actions">
+
+                <a href="{% url 'products' %}" class="success-button">
+                    Continue Shopping
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

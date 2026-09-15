@@ -5,13 +5,26 @@ from accounts import views
 from django.conf import settings
 from django.conf.urls.static import static
 from products.models import Category
+from products.models import Product
 
 def home(request):
     return render(request, 'index.html')
 
 
-# def products(request):
-#     return render(request, 'pages/products.html')
+def products(request):
+
+    products = Product.objects.all()
+
+    category_id = request.GET.get('category')
+
+    if category_id:
+        products = products.filter(category_id=category_id)
+
+    return render(
+        request,
+        'pages/products.html',
+        {'products': products}
+    )
 
 
 def categories(request):
@@ -63,6 +76,8 @@ urlpatterns = [
     path('login/', login_view, name='login'),
 
     path('cart/', include('cart.urls')),
+
+    path('orders/', include('orders.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
