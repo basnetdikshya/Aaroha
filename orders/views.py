@@ -84,3 +84,34 @@ def order_success(request, order_id):
         'orders/order_success.html',
         {'order': order}
     )
+
+@login_required
+def my_orders(request):
+
+    orders = Order.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    return render(
+        request,
+        'orders/my_orders.html',
+        {
+            'orders': orders
+        }
+    )
+
+@login_required
+def order_detail(request, order_id):
+
+    order = Order.objects.get(
+        id=order_id,
+        user=request.user
+    )
+
+    return render(
+        request,
+        'orders/order_detail.html',
+        {
+            'order': order
+        }
+    )

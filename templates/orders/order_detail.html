@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Order Details
+{% endblock %}
+
+
+{% block content %}
+
+<section class="order-detail-section">
+
+    <div class="container">
+
+        <!-- HEADER -->
+
+        <div class="order-detail-header">
+
+            <a href="{% url 'my_orders' %}" class="back-link">
+                ← Back to My Orders
+            </a>
+
+            <span class="section-label">
+                ORDER DETAILS
+            </span>
+
+            <h1>
+                Order #{{ order.id }}
+            </h1>
+
+            <p>
+                Placed on {{ order.created_at|date:"F d, Y" }}
+            </p>
+
+        </div>
+
+
+        <!-- ORDER STATUS -->
+
+        <div class="tracking-card">
+
+            <div class="tracking-header">
+
+                <div>
+                    <span class="tracking-label">
+                        ORDER STATUS
+                    </span>
+
+                    <h2>
+                        {{ order.status }}
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <!-- TRACKING -->
+
+            <div class="tracking">
+
+                <div class="tracking-step
+                    {% if order.status == 'Pending' or order.status == 'Confirmed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                    completed
+                    {% endif %}">
+
+                    <div class="tracking-circle">
+                        ✓
+                    </div>
+
+                    <span>
+                        Order Placed
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-line"></div>
+
+
+                <div class="tracking-step
+                    {% if order.status == 'Confirmed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                    completed
+                    {% endif %}">
+
+                    <div class="tracking-circle">
+                        {% if order.status == 'Confirmed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                            ✓
+                        {% else %}
+                            2
+                        {% endif %}
+                    </div>
+
+                    <span>
+                        Confirmed
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-line"></div>
+
+
+                <div class="tracking-step
+                    {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                    completed
+                    {% endif %}">
+
+                    <div class="tracking-circle">
+                        {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                            ✓
+                        {% else %}
+                            3
+                        {% endif %}
+                    </div>
+
+                    <span>
+                        Processing
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-line"></div>
+
+
+                <div class="tracking-step
+                    {% if order.status == 'Shipped' or order.status == 'Delivered' %}
+                    completed
+                    {% endif %}">
+
+                    <div class="tracking-circle">
+                        {% if order.status == 'Shipped' or order.status == 'Delivered' %}
+                            ✓
+                        {% else %}
+                            4
+                        {% endif %}
+                    </div>
+
+                    <span>
+                        Shipped
+                    </span>
+
+                </div>
+
+
+                <div class="tracking-line"></div>
+
+
+                <div class="tracking-step
+                    {% if order.status == 'Delivered' %}
+                    completed
+                    {% endif %}">
+
+                    <div class="tracking-circle">
+                        {% if order.status == 'Delivered' %}
+                            ✓
+                        {% else %}
+                            5
+                        {% endif %}
+                    </div>
+
+                    <span>
+                        Delivered
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAIN CONTENT -->
+
+        <div class="order-detail-layout">
+
+
+            <!-- PRODUCTS -->
+
+            <div class="order-products-card">
+
+                <div class="card-heading">
+
+                    <h2>
+                        Ordered Products
+                    </h2>
+
+                    <span>
+                        {{ order.items.count }} item{{ order.items.count|pluralize }}
+                    </span>
+
+                </div>
+
+
+                <div class="ordered-products">
+
+                    {% for item in order.items.all %}
+
+                    <div class="ordered-product">
+
+                        <div class="ordered-product-image">
+
+                            {% if item.product.image %}
+
+                                <img
+                                    src="{{ item.product.image.url }}"
+                                    alt="{{ item.product.name }}"
+                                >
+
+                            {% else %}
+
+                                <div class="detail-no-image">
+                                    No Image
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="ordered-product-info">
+
+                            <span>
+                                {{ item.product.category.name }}
+                            </span>
+
+                            <h3>
+                                {{ item.product.name }}
+                            </h3>
+
+                            <p>
+                                {{ item.quantity }} × Rs. {{ item.price }}
+                            </p>
+
+                        </div>
+
+
+                        <div class="ordered-product-total">
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong>
+                                Rs. {{ item.subtotal }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="order-total">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.total_amount }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- DELIVERY INFORMATION -->
+
+            <div class="delivery-card">
+
+                <h2>
+                    Delivery Information
+                </h2>
+
+
+                <div class="delivery-row">
+
+                    <span>
+                        Customer Name
+                    </span>
+
+                    <strong>
+                        {{ order.customer_name }}
+                    </strong>
+
+                </div>
+
+
+                <div class="delivery-row">
+
+                    <span>
+                        Phone
+                    </span>
+
+                    <strong>
+                        {{ order.phone }}
+                    </strong>
+
+                </div>
+
+
+                <div class="delivery-row">
+
+                    <span>
+                        Address
+                    </span>
+
+                    <strong>
+                        {{ order.address }}
+                    </strong>
+
+                </div>
+
+
+                <div class="delivery-row">
+
+                    <span>
+                        City
+                    </span>
+
+                    <strong>
+                        {{ order.city }}
+                    </strong>
+
+                </div>
+
+
+                <div class="delivery-row">
+
+                    <span>
+                        Order Status
+                    </span>
+
+                    <strong>
+                        {{ order.status }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
