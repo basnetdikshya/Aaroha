@@ -44,8 +44,7 @@ def contact(request):
     return render(request, 'pages/contact.html')
 
 
-def login_view(request):
-    return render(request, 'accounts/login.html')
+
 
 urlpatterns = [
 
@@ -73,7 +72,6 @@ urlpatterns = [
 
     path('contact/', contact, name='contact'),
 
-    path('login/', login_view, name='login'),
 
     path('cart/', include('cart.urls')),
 

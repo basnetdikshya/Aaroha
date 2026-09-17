@@ -3965,3 +3965,207 @@ textarea:focus-visible {
 .order-card-action a:hover {
     color: #174832;
 }
+
+
+/* =====================================================
+   CUSTOMER DASHBOARD
+===================================================== */
+
+.customer-dashboard {
+    padding: 60px 0;
+    background: #FAF8F2;
+    min-height: 70vh;
+}
+
+.customer-dashboard-header {
+    margin-bottom: 35px;
+}
+
+.customer-dashboard-header .section-label {
+    color: #1F5D42;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.customer-dashboard-header h1 {
+    margin: 8px 0;
+    color: #26332D;
+    font-size: 36px;
+}
+
+.customer-dashboard-header p {
+    color: #718078;
+    font-size: 15px;
+}
+
+
+/* DASHBOARD CARDS */
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.dashboard-card {
+    display: flex;
+    gap: 20px;
+    padding: 25px;
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+}
+
+.dashboard-card:hover {
+    border-color: #7BAE8A;
+}
+
+.dashboard-card-icon {
+    width: 55px;
+    height: 55px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #EAF2EC;
+    font-size: 25px;
+}
+
+.dashboard-card-content h3 {
+    margin: 0 0 7px;
+    color: #26332D;
+    font-size: 19px;
+}
+
+.dashboard-card-content p {
+    margin: 0 0 12px;
+    color: #718078;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.dashboard-card-content a {
+    color: #1F5D42;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.dashboard-card-content a:hover {
+    color: #174832;
+}
+
+
+/* QUICK ACTIONS */
+
+.dashboard-actions {
+    margin-top: 30px;
+    padding: 25px;
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+}
+
+.dashboard-actions-header {
+    margin-bottom: 20px;
+}
+
+.dashboard-actions-header h2 {
+    margin: 0 0 6px;
+    color: #26332D;
+    font-size: 22px;
+}
+
+.dashboard-actions-header p {
+    margin: 0;
+    color: #718078;
+    font-size: 14px;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.quick-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 100px;
+    padding: 15px;
+    background: #FAF8F2;
+    border: 1px solid #DDE5DF;
+    border-radius: 10px;
+    color: #26332D;
+    text-decoration: none;
+    text-align: center;
+}
+
+.quick-action:hover {
+    border-color: #7BAE8A;
+    color: #1F5D42;
+}
+
+.quick-action span {
+    font-size: 25px;
+}
+
+.quick-action strong {
+    font-size: 13px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 800px) {
+
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .customer-dashboard {
+        padding: 40px 0;
+    }
+
+    .customer-dashboard-header h1 {
+        font-size: 28px;
+    }
+
+    .dashboard-card {
+        padding: 20px;
+    }
+
+    .dashboard-actions {
+        padding: 18px;
+    }
+
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+.login-error {
+    margin-bottom: 18px;
+    padding: 12px 15px;
+    background: #FDECEC;
+    border: 1px solid #D9534F;
+    border-radius: 8px;
+    color: #B52B2B;
+    font-size: 14px;
+}
