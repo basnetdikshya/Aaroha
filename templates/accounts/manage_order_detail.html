@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Order #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <a
+                    href="{% url 'manage_orders' %}"
+                    class="back-link"
+                >
+                    ← Back to Orders
+                </a>
+
+                <h1>Order #{{ order.id }}</h1>
+
+                <p>
+                    Order placed on
+                    {{ order.created_at|date:"F d, Y, h:i A" }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="order-management-grid">
+
+
+            <!-- CUSTOMER INFORMATION -->
+
+            <div class="management-card">
+
+                <h2>Customer Information</h2>
+
+                <div class="customer-info">
+
+                    <div>
+                        <span>Name</span>
+                        <strong>{{ order.customer_name }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Phone</span>
+                        <strong>{{ order.phone }}</strong>
+                    </div>
+
+                    <div>
+                        <span>City</span>
+                        <strong>{{ order.city }}</strong>
+                    </div>
+
+                    <div>
+                        <span>Address</span>
+                        <strong>{{ order.address }}</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ORDER STATUS -->
+
+            <div class="management-card">
+
+                <h2>Order Status</h2>
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <label for="status">
+                        Update Status
+                    </label>
+
+                    <select
+                        name="status"
+                        id="status"
+                        class="status-select"
+                    >
+
+                        <option value="Pending"
+                            {% if order.status == 'Pending' %}selected{% endif %}>
+                            Pending
+                        </option>
+
+                        <option value="Confirmed"
+                            {% if order.status == 'Confirmed' %}selected{% endif %}>
+                            Confirmed
+                        </option>
+
+                        <option value="Processing"
+                            {% if order.status == 'Processing' %}selected{% endif %}>
+                            Processing
+                        </option>
+
+                        <option value="Shipped"
+                            {% if order.status == 'Shipped' %}selected{% endif %}>
+                            Shipped
+                        </option>
+
+                        <option value="Delivered"
+                            {% if order.status == 'Delivered' %}selected{% endif %}>
+                            Delivered
+                        </option>
+
+                        <option value="Cancelled"
+                            {% if order.status == 'Cancelled' %}selected{% endif %}>
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Update Status
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- ORDER ITEMS -->
+
+            <div class="management-card order-items-card">
+
+                <h2>Order Items</h2>
+
+                <div class="order-items-list">
+
+                    {% for item in order.items.all %}
+
+                    <div class="management-order-item">
+
+                        <div>
+
+                            <strong>
+                                {{ item.product.name }}
+                            </strong>
+
+                            <span>
+                                Quantity: {{ item.quantity }}
+                            </span>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Rs. {{ item.subtotal }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="management-order-total">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <strong>
+                        Rs. {{ order.total_amount }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

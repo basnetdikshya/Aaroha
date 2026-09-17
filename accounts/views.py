@@ -333,3 +333,110 @@ def redirect_user_by_role(role):
         return redirect('rider_dashboard')
 
     return redirect('login')
+
+# =========================================================
+# OWNER / STAFF ORDER MANAGEMENT
+# =========================================================
+
+@login_required
+def manage_orders(request):
+
+    from orders.models import Order
+
+    # Superuser can access
+    if request.user.is_superuser:
+        orders = Order.objects.all().order_by('-created_at')
+
+        return render(
+            request,
+            'accounts/manage_orders.html',
+            {
+                'orders': orders,
+            }
+        )
+
+    # Check user role
+    try:
+        profile = UserProfile.objects.get(
+            user=request.user
+        )
+
+    except UserProfile.DoesNotExist:
+        logout(request)
+        return redirect('login')
+
+    # Only owner and staff can manage orders
+    if profile.role not in ['owner', 'staff']:
+        return redirect_user_by_role(profile.role)
+
+    orders = Order.objects.all().order_by('-created_at')
+
+    return render(
+        request,
+        'accounts/manage_orders.html',
+        {
+            'orders': orders,
+        }
+    )
+
+
+@login_required
+def manage_order_detail(request, order_id):
+
+    from django.shortcuts import get_object_or_404
+    from orders.models import Order
+
+    # Superuser can access
+    if request.user.is_superuser:
+        pass
+
+    else:
+        # Check user role
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can manage orders
+        if profile.role not in ['owner', 'staff']:
+            return redirect_user_by_role(profile.role)
+
+    order = get_object_or_404(
+        Order,
+        id=order_id
+    )
+
+    if request.method == 'POST':
+
+        new_status = request.POST.get('status')
+
+        valid_statuses = [
+            'Pending',
+            'Confirmed',
+            'Processing',
+            'Shipped',
+            'Delivered',
+            'Cancelled',
+        ]
+
+        if new_status in valid_statuses:
+
+            order.status = new_status
+            order.save()
+
+        return redirect(
+            'manage_order_detail',
+            order_id=order.id
+        )
+
+    return render(
+        request,
+        'accounts/manage_order_detail.html',
+        {
+            'order': order,
+        }
+    )

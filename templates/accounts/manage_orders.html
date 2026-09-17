@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Manage Orders
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+                <h1>Manage Orders</h1>
+                <p>View and manage customer orders.</p>
+            </div>
+
+        </div>
+
+
+        <div class="orders-management-card">
+
+            {% if orders %}
+
+                <div class="orders-table-wrapper">
+
+                    <table class="orders-table">
+
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% for order in orders %}
+
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        #{{ order.id }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ order.customer_name }}
+                                </td>
+
+                                <td>
+                                    {{ order.created_at|date:"M d, Y" }}
+                                </td>
+
+                                <td>
+                                    Rs. {{ order.total_amount }}
+                                </td>
+
+                                <td>
+
+                                    <span class="order-status status-{{ order.status|lower }}">
+                                        {{ order.status }}
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <a
+                                        href="{% url 'manage_order_detail' order.id %}"
+                                        class="view-order-button"
+                                    >
+                                        View Details
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-orders">
+
+                    <div class="empty-orders-icon">
+                        📦
+                    </div>
+
+                    <h3>No Orders Yet</h3>
+
+                    <p>
+                        Customer orders will appear here once they are placed.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -4169,3 +4169,223 @@ textarea:focus-visible {
     color: #B52B2B;
     font-size: 14px;
 }
+
+
+/* =========================================================
+   ORDER MANAGEMENT
+========================================================= */
+
+.orders-management-card,
+.management-card {
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.orders-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.orders-table th {
+    text-align: left;
+    padding: 15px;
+    background: #FAF8F2;
+    color: #718078;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.orders-table td {
+    padding: 17px 15px;
+    border-bottom: 1px solid #DDE5DF;
+    color: #26332D;
+    font-size: 14px;
+}
+
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table td strong {
+    color: #26332D;
+}
+
+.view-order-button {
+    color: #1F5D42;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.view-order-button:hover {
+    color: #174832;
+}
+
+.order-management-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.management-card h2 {
+    margin: 0 0 20px;
+    color: #26332D;
+    font-size: 20px;
+}
+
+.customer-info {
+    display: grid;
+    gap: 16px;
+}
+
+.customer-info span {
+    display: block;
+    margin-bottom: 5px;
+    color: #718078;
+    font-size: 12px;
+}
+
+.customer-info strong {
+    display: block;
+    color: #26332D;
+    font-size: 14px;
+}
+
+.management-card form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #26332D;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #DDE5DF;
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: #26332D;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.primary-button {
+    border: none;
+    padding: 11px 18px;
+    border-radius: 8px;
+    background: #1F5D42;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primary-button:hover {
+    background: #174832;
+}
+
+.order-items-card {
+    grid-column: 1 / -1;
+}
+
+.management-order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #DDE5DF;
+}
+
+.management-order-item:last-child {
+    border-bottom: none;
+}
+
+.management-order-item strong {
+    display: block;
+    color: #26332D;
+    font-size: 14px;
+}
+
+.management-order-item span {
+    display: block;
+    margin-top: 5px;
+    color: #718078;
+    font-size: 12px;
+}
+
+.management-order-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 2px solid #DDE5DF;
+}
+
+.management-order-total span {
+    color: #718078;
+    font-size: 14px;
+}
+
+.management-order-total strong {
+    color: #1F5D42;
+    font-size: 18px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #1F5D42;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.empty-orders {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.empty-orders-icon {
+    margin-bottom: 12px;
+    font-size: 40px;
+}
+
+.empty-orders h3 {
+    margin: 0 0 8px;
+    color: #26332D;
+}
+
+.empty-orders p {
+    margin: 0;
+    color: #718078;
+    font-size: 14px;
+}
+
+@media (max-width: 800px) {
+
+    .order-management-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .order-items-card {
+        grid-column: auto;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .orders-management-card,
+    .management-card {
+        padding: 18px;
+    }
+
+}

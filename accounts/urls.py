@@ -52,5 +52,7 @@ urlpatterns = [
         views.rider_dashboard,
         name='rider_dashboard'
     ),
-   
+
+   path('manage-orders/', views.manage_orders, name='manage_orders'),
+   path('manage-orders/<int:order_id>/', views.manage_order_detail, name='manage_order_detail'),
 ]
