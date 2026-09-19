@@ -1,0 +1,256 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Inventory Management
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+                <h1>Inventory Management</h1>
+
+                <p>
+                    Monitor product stock and availability.
+                </p>
+            </div>
+
+        </div>
+
+
+        <!-- INVENTORY STATISTICS -->
+
+        <div class="inventory-statistics">
+
+            <!-- TOTAL PRODUCTS -->
+
+            <div class="inventory-stat-card">
+
+                <div class="inventory-stat-icon">
+                    📦
+                </div>
+
+                <div>
+                    <span>Total Products</span>
+
+                    <strong>
+                        {{ total_products }}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- IN STOCK -->
+
+            <div class="inventory-stat-card">
+
+                <div class="inventory-stat-icon">
+                    ✓
+                </div>
+
+                <div>
+                    <span>In Stock</span>
+
+                    <strong>
+                        {{ in_stock }}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- LOW STOCK -->
+
+            <div class="inventory-stat-card">
+
+                <div class="inventory-stat-icon">
+                    ⚠
+                </div>
+
+                <div>
+                    <span>Low Stock</span>
+
+                    <strong>
+                        {{ low_stock }}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <!-- OUT OF STOCK -->
+
+            <div class="inventory-stat-card">
+
+                <div class="inventory-stat-icon">
+                    !
+                </div>
+
+                <div>
+                    <span>Out of Stock</span>
+
+                    <strong>
+                        {{ out_of_stock }}
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- INVENTORY TABLE -->
+
+        <div class="inventory-card">
+
+            <div class="inventory-card-header">
+
+                <div>
+                    <h2>Product Inventory</h2>
+
+                    <p>
+                        Current stock levels for all products.
+                    </p>
+                </div>
+
+            </div>
+
+
+            {% if products %}
+
+            <div class="inventory-table-wrapper">
+
+                <table class="inventory-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Product</th>
+
+                            <th>Category</th>
+
+                            <th>Price</th>
+
+                            <th>Stock</th>
+
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for product in products %}
+
+                        <tr>
+
+                            <!-- PRODUCT -->
+
+                            <td>
+
+                                <strong>
+                                    {{ product.name }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- CATEGORY -->
+
+                            <td>
+                                {{ product.category.name }}
+                            </td>
+
+
+                            <!-- PRICE -->
+
+                            <td>
+                                Rs. {{ product.price }}
+                            </td>
+
+
+                            <!-- STOCK -->
+
+                            <td>
+
+                                <strong>
+                                    {{ product.stock }}
+                                </strong>
+
+                                {{ product.unit }}
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                {% if product.stock == 0 %}
+
+                                    <span class="inventory-status out-of-stock">
+                                        Out of Stock
+                                    </span>
+
+                                {% elif product.stock <= 10 %}
+
+                                    <span class="inventory-status low-stock">
+                                        Low Stock
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="inventory-status in-stock">
+                                        In Stock
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="inventory-empty">
+
+                <div>
+                    📦
+                </div>
+
+                <h3>No Products Found</h3>
+
+                <p>
+                    Add products to start managing inventory.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

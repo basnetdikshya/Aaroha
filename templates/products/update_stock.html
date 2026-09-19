@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Update Stock | AAROHA
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="max-width: 600px; margin: 50px auto;">
+
+    <h1>Update Stock</h1>
+
+    <p>
+        Product:
+        <strong>{{ product.name }}</strong>
+    </p>
+
+    <p>
+        Current Stock:
+        <strong>{{ product.stock }}</strong>
+    </p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 20px;">
+            <label for="stock">
+                New Stock
+            </label>
+
+            <input
+                type="number"
+                name="stock"
+                id="stock"
+                value="{{ product.stock }}"
+                min="0"
+                step="0.01"
+                required
+            >
+        </div>
+
+        <button type="submit">
+            Update Stock
+        </button>
+
+        <a href="{% url 'inventory' %}">
+            Cancel
+        </a>
+    </form>
+
+</div>
+
+{% endblock %}
