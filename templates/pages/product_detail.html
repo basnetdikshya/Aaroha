@@ -86,27 +86,38 @@ AAROHA | {{ product.name }}
 
 
                 <!-- Stock -->
-                <div class="stock-status">
+               <!-- Stock -->
+<div class="stock-status">
 
-                    {% if product.stock > 0 %}
+    {% if product.stock == 0 %}
 
-                        <span class="in-stock">
-                            ✓ In Stock
-                        </span>
+        <span class="out-of-stock">
+            ✕ Out of Stock
+        </span>
 
-                        <span>
-                            {{ product.stock }} available
-                        </span>
+    {% elif product.stock <= 10 %}
 
-                    {% else %}
+        <span class="low-stock">
+            ⚠ Low Stock
+        </span>
 
-                        <span class="out-of-stock">
-                            ✕ Out of Stock
-                        </span>
+        <span>
+            Only {{ product.stock }} available
+        </span>
 
-                    {% endif %}
+    {% else %}
 
-                </div>
+        <span class="in-stock">
+            ✓ In Stock
+        </span>
+
+        <span>
+            {{ product.stock }} available
+        </span>
+
+    {% endif %}
+
+</div>
 
 
                 <!-- =========================

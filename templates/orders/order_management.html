@@ -1,0 +1,247 @@
+```django
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Order Management
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <h1>
+                    Order Management
+                </h1>
+
+                <p>
+                    View and manage customer orders.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDER MANAGEMENT CARD -->
+
+        <div class="orders-management-card">
+
+            <div class="orders-management-header">
+
+                <div>
+
+                    <h2>
+                        Customer Orders
+                    </h2>
+
+                    <p>
+                        Manage order status and view order information.
+                    </p>
+
+                </div>
+
+                <div class="orders-count">
+
+                    {{ orders|length }} Orders
+
+                </div>
+
+            </div>
+
+
+            {% if orders %}
+
+            <!-- ORDER TABLE -->
+
+            <div class="orders-table-wrapper">
+
+                <table class="orders-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for order in orders %}
+
+                        <tr>
+
+                            <!-- ORDER -->
+
+                            <td>
+
+                                <strong>
+                                    #{{ order.id }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- CUSTOMER -->
+
+                            <td>
+
+                                <strong>
+                                    {{ order.customer_name }}
+                                </strong>
+
+                                <small>
+                                    {{ order.phone }}
+                                </small>
+
+                            </td>
+
+
+                            <!-- DATE -->
+
+                            <td>
+
+                                {{ order.created_at|date:"d M Y" }}
+
+                                <small>
+                                    {{ order.created_at|date:"h:i A" }}
+                                </small>
+
+                            </td>
+
+
+                            <!-- TOTAL -->
+
+                            <td>
+
+                                <strong>
+                                    Rs. {{ order.total_amount }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'update_order_status' order.id %}"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <select
+                                        name="status"
+                                        class="status-select"
+                                        onchange="this.form.submit()"
+                                    >
+
+                                        {% for value, label in status_choices %}
+
+                                            <option
+                                                value="{{ value }}"
+                                                {% if order.status == value %}
+                                                    selected
+                                                {% endif %}
+                                            >
+                                                {{ label }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </form>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <a
+                                    href="{% url 'order_detail' order.id %}"
+                                    class="view-order-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <!-- EMPTY STATE -->
+
+            <div class="empty-orders">
+
+                <div class="empty-orders-icon">
+                    📦
+                </div>
+
+                <h3>
+                    No Orders Yet
+                </h3>
+
+                <p>
+                    Customer orders will appear here once they place an order.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+```

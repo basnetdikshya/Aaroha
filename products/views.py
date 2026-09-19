@@ -88,21 +88,6 @@ def inventory(request):
         context
     )
 
-def update_stock(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-
-    if request.method == 'POST':
-        stock = request.POST.get('stock')
-
-        if stock:
-            product.stock = stock
-            product.save()
-
-        return redirect('inventory')
-
-    return render(request, 'pages/update_stock.html', {
-        'product': product
-    })
 
     # =========================================================
 # UPDATE PRODUCT STOCK

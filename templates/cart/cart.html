@@ -6,6 +6,25 @@ AAROHA | Shopping Cart
 
 {% block content %}
 
+{% if request.session.cart_error %}
+    <div class="cart-error">
+        {{ request.session.cart_error }}
+    </div>
+
+    {% comment %}
+    Remove the error after displaying it.
+    {% endcomment %}
+
+    {% with request.session.cart_error as cart_error %}
+    {% endwith %}
+{% endif %}
+
+{% if error %}
+    <div class="cart-error">
+        {{ error }}
+    </div>
+{% endif %}
+
 <section class="cart-section">
 
     <div class="container">

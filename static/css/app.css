@@ -2440,6 +2440,11 @@ textarea:focus-visible {
     font-weight: 600;
 }
 
+.low-stock {
+    color: #D99A2B;
+    font-weight: 600;
+}
+
 .out-of-stock {
     color: #D9534F;
     font-weight: 600;
@@ -4696,3 +4701,117 @@ textarea:focus-visible {
     }
 
 }
+
+
+/* =========================================================
+   CHECKOUT STOCK ERROR
+========================================================= */
+
+.checkout-error {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+
+    border: 1px solid #F1CACA;
+    border-radius: 8px;
+
+    background: #FDEAEA;
+    color: #D9534F;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CART STOCK ERROR
+========================================================= */
+
+.cart-error {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+
+    border: 1px solid #F1CACA;
+    border-radius: 8px;
+
+    background: #FDEAEA;
+    color: #D9534F;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* CANCELLED ORDER TRACKING */
+
+.cancelled-tracking {
+    align-items: center;
+}
+
+.cancelled-step .tracking-circle {
+    background: #FDEAEA;
+    color: #D9534F;
+    border-color: #D9534F;
+}
+
+.cancelled-step span {
+    color: #D9534F;
+    font-weight: 600;
+}
+
+
+
+/* =========================================================
+   MY ORDERS STATUS
+========================================================= */
+
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Pending */
+
+.status-pending {
+    background: #FFF4D6;
+    color: #D99A2B;
+}
+
+/* Confirmed */
+
+.status-confirmed {
+    background: #E8F3ED;
+    color: #1F5D42;
+}
+
+/* Processing */
+
+.status-processing {
+    background: #EAF2F8;
+    color: #4A90A4;
+}
+
+/* Shipped */
+
+.status-shipped {
+    background: #EAF2F8;
+    color: #4A90A4;
+}
+
+/* Delivered */
+
+.status-delivered {
+    background: #E8F3ED;
+    color: #2E8B57;
+}
+
+/* Cancelled */
+
+.status-cancelled {
+    background: #FDEAEA;
+    color: #D9534F;
+}
+

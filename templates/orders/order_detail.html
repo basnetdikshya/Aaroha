@@ -36,7 +36,7 @@ AAROHA | Order Details
 
         <!-- ORDER STATUS -->
 
-        <div class="tracking-card">
+        <!-- <div class="tracking-card">
 
             <div class="tracking-header">
 
@@ -50,7 +50,204 @@ AAROHA | Order Details
                     </h2>
                 </div>
 
+            </div> -->
+            
+            ```django
+<!-- ORDER STATUS -->
+
+<div class="tracking-card">
+
+    <div class="tracking-header">
+
+        <div>
+
+            <span class="tracking-label">
+                ORDER STATUS
+            </span>
+
+            <h2>
+                {{ order.status }}
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    {% if order.status == 'Cancelled' %}
+
+        <!-- CANCELLED ORDER -->
+
+        <div class="tracking cancelled-tracking">
+
+            <div class="tracking-step completed">
+
+                <div class="tracking-circle">
+                    ✓
+                </div>
+
+                <span>
+                    Order Placed
+                </span>
+
             </div>
+
+
+            <div class="tracking-line"></div>
+
+
+            <div class="tracking-step cancelled-step">
+
+                <div class="tracking-circle">
+                    ✕
+                </div>
+
+                <span>
+                    Cancelled
+                </span>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- NORMAL ORDER TRACKING -->
+
+        <div class="tracking">
+
+            <!-- ORDER PLACED -->
+
+            <div class="tracking-step
+                {% if order.status == 'Pending' or order.status == 'Confirmed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                completed
+                {% endif %}">
+
+                <div class="tracking-circle">
+                    ✓
+                </div>
+
+                <span>
+                    Order Placed
+                </span>
+
+            </div>
+
+
+            <div class="tracking-line"></div>
+
+
+            <!-- CONFIRMED -->
+
+            <div class="tracking-step
+                {% if order.status == 'Confirmed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                completed
+                {% endif %}">
+
+                <div class="tracking-circle">
+
+                    {% if order.status == 'Confirmed' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                        ✓
+                    {% else %}
+                        2
+                    {% endif %}
+
+                </div>
+
+                <span>
+                    Confirmed
+                </span>
+
+            </div>
+
+
+            <div class="tracking-line"></div>
+
+
+            <!-- PROCESSING -->
+
+            <div class="tracking-step
+                {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                completed
+                {% endif %}">
+
+                <div class="tracking-circle">
+
+                    {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}
+                        ✓
+                    {% else %}
+                        3
+                    {% endif %}
+
+                </div>
+
+                <span>
+                    Processing
+                </span>
+
+            </div>
+
+
+            <div class="tracking-line"></div>
+
+
+            <!-- SHIPPED -->
+
+            <div class="tracking-step
+                {% if order.status == 'Shipped' or order.status == 'Delivered' %}
+                completed
+                {% endif %}">
+
+                <div class="tracking-circle">
+
+                    {% if order.status == 'Shipped' or order.status == 'Delivered' %}
+                        ✓
+                    {% else %}
+                        4
+                    {% endif %}
+
+                </div>
+
+                <span>
+                    Shipped
+                </span>
+
+            </div>
+
+
+            <div class="tracking-line"></div>
+
+
+            <!-- DELIVERED -->
+
+            <div class="tracking-step
+                {% if order.status == 'Delivered' %}
+                completed
+                {% endif %}">
+
+                <div class="tracking-circle">
+
+                    {% if order.status == 'Delivered' %}
+                        ✓
+                    {% else %}
+                        5
+                    {% endif %}
+
+                </div>
+
+                <span>
+                    Delivered
+                </span>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+```
 
 
             <!-- TRACKING -->

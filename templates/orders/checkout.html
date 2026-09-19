@@ -6,6 +6,12 @@ AAROHA | Checkout
 
 {% block content %}
 
+{% if error %}
+    <div class="checkout-error">
+        {{ error }}
+    </div>
+{% endif %}
+
 <section class="checkout-section">
 
     <div class="container">

@@ -28,4 +28,16 @@ urlpatterns = [
         name='order_detail'
     ),
 
+        path(
+        'management/',
+        views.order_management,
+        name='order_management'
+    ),
+
+    path(
+        'management/update-status/<int:order_id>/',
+        views.update_order_status,
+        name='update_order_status'
+    ),
+
 ]

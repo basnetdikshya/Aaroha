@@ -15,11 +15,13 @@ AAROHA | Inventory Management
         <div class="page-header">
 
             <div>
+
                 <h1>Inventory Management</h1>
 
                 <p>
                     Monitor product stock and availability.
                 </p>
+
             </div>
 
         </div>
@@ -38,11 +40,13 @@ AAROHA | Inventory Management
                 </div>
 
                 <div>
+
                     <span>Total Products</span>
 
                     <strong>
                         {{ total_products }}
                     </strong>
+
                 </div>
 
             </div>
@@ -57,11 +61,13 @@ AAROHA | Inventory Management
                 </div>
 
                 <div>
+
                     <span>In Stock</span>
 
                     <strong>
                         {{ in_stock }}
                     </strong>
+
                 </div>
 
             </div>
@@ -76,11 +82,13 @@ AAROHA | Inventory Management
                 </div>
 
                 <div>
+
                     <span>Low Stock</span>
 
                     <strong>
                         {{ low_stock }}
                     </strong>
+
                 </div>
 
             </div>
@@ -95,11 +103,13 @@ AAROHA | Inventory Management
                 </div>
 
                 <div>
+
                     <span>Out of Stock</span>
 
                     <strong>
                         {{ out_of_stock }}
                     </strong>
+
                 </div>
 
             </div>
@@ -114,11 +124,13 @@ AAROHA | Inventory Management
             <div class="inventory-card-header">
 
                 <div>
+
                     <h2>Product Inventory</h2>
 
                     <p>
                         Current stock levels for all products.
                     </p>
+
                 </div>
 
             </div>
@@ -171,14 +183,18 @@ AAROHA | Inventory Management
                             <!-- CATEGORY -->
 
                             <td>
+
                                 {{ product.category.name }}
+
                             </td>
 
 
                             <!-- PRICE -->
 
                             <td>
+
                                 Rs. {{ product.price }}
+
                             </td>
 
 
@@ -221,16 +237,19 @@ AAROHA | Inventory Management
 
                             </td>
 
+
+                            <!-- ACTION -->
+
                             <td>
 
-    <a
-        href="{% url 'update_stock' product.id %}"
-        class="update-stock-button"
-    >
-        Update
-    </a>
+                                <a
+                                    href="{% url 'update_stock' product.id %}"
+                                    class="update-stock-button"
+                                >
+                                    Update
+                                </a>
 
-</td>
+                            </td>
 
                         </tr>
 
@@ -242,7 +261,10 @@ AAROHA | Inventory Management
 
             </div>
 
+
             {% else %}
+
+            <!-- EMPTY INVENTORY -->
 
             <div class="inventory-empty">
 
@@ -250,7 +272,9 @@ AAROHA | Inventory Management
                     📦
                 </div>
 
-                <h3>No Products Found</h3>
+                <h3>
+                    No Products Found
+                </h3>
 
                 <p>
                     Add products to start managing inventory.
