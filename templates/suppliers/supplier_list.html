@@ -1,0 +1,252 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Suppliers
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="section-label">
+                    SUPPLIER MANAGEMENT
+                </span>
+
+                <h1>
+                    Suppliers
+                </h1>
+
+                <p>
+                    Manage your suppliers and supplier information.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <a
+                    href="{% url 'add_supplier' %}"
+                    class="primary-button"
+                >
+                    + Add Supplier
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUPPLIER CARD -->
+
+        <div class="supplier-management-card">
+
+            <div class="supplier-management-header">
+
+                <div>
+
+                    <h2>
+                        Supplier Directory
+                    </h2>
+
+                    <p>
+                        View and manage all registered suppliers.
+                    </p>
+
+                </div>
+
+
+                <div class="suppliers-count">
+
+                    {{ suppliers|length }} Supplier{{ suppliers|length|pluralize }}
+
+                </div>
+
+            </div>
+
+
+            {% if suppliers %}
+
+            <!-- SUPPLIER TABLE -->
+
+            <div class="suppliers-table-wrapper">
+
+                <table class="suppliers-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Supplier</th>
+                            <th>Company</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>City</th>
+                            <th>Status</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for supplier in suppliers %}
+
+                        <tr>
+
+                            <!-- SUPPLIER -->
+
+                            <td>
+
+                                <strong>
+                                    {{ supplier.name }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- COMPANY -->
+
+                            <td>
+
+                                {% if supplier.company_name %}
+
+                                    {{ supplier.company_name }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- PHONE -->
+
+                            <td>
+                                {{ supplier.phone }}
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td>
+
+                                {% if supplier.email %}
+
+                                    {{ supplier.email }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- CITY -->
+
+                            <td>
+                                {{ supplier.city }}
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <span
+                                    class="supplier-status
+                                    status-{{ supplier.status|lower }}"
+                                >
+                                    {{ supplier.status }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTIONS -->
+
+                            <td>
+
+                                <div class="supplier-actions">
+
+                                    <a
+                                        href="{% url 'supplier_detail' supplier.id %}"
+                                        class="supplier-view-button"
+                                    >
+                                        View
+                                    </a>
+
+                                    <a
+                                        href="{% url 'edit_supplier' supplier.id %}"
+                                        class="supplier-edit-button"
+                                    >
+                                        Edit
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+            <!-- EMPTY SUPPLIER STATE -->
+
+            <div class="empty-suppliers">
+
+                <div class="empty-suppliers-icon">
+                    🏢
+                </div>
+
+                <h3>
+                    No Suppliers Yet
+                </h3>
+
+                <p>
+                    Add your first supplier to start managing supplier information.
+                </p>
+
+                <a
+                    href="{% url 'add_supplier' %}"
+                    class="primary-button"
+                >
+                    + Add Supplier
+                </a>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+

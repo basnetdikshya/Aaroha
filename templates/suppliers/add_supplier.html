@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Add Supplier
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <!-- PAGE HEADER -->
+
+        <div class="page-header">
+
+            <div>
+
+                <a
+                    href="{% url 'supplier_list' %}"
+                    class="back-link"
+                >
+                    ← Back to Suppliers
+                </a>
+
+                <span class="section-label">
+                    SUPPLIER MANAGEMENT
+                </span>
+
+                <h1>
+                    Add Supplier
+                </h1>
+
+                <p>
+                    Add a new supplier to your supplier directory.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADD SUPPLIER FORM -->
+
+        <div class="supplier-form-card">
+
+            <div class="supplier-form-header">
+
+                <h2>
+                    Supplier Information
+                </h2>
+
+                <p>
+                    Enter the supplier's contact and business details.
+                </p>
+
+            </div>
+
+
+            <form
+                method="POST"
+                class="supplier-form"
+            >
+
+                {% csrf_token %}
+
+
+                <!-- SUPPLIER NAME -->
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Supplier Name
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter supplier name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- COMPANY NAME -->
+
+                <div class="form-group">
+
+                    <label for="company_name">
+                        Company Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="company_name"
+                        name="company_name"
+                        placeholder="Enter company name"
+                    >
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter phone number"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter email address"
+                    >
+
+                </div>
+
+
+                <!-- CITY -->
+
+                <div class="form-group">
+
+                    <label for="city">
+                        City
+                        <span>*</span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter city"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- ADDRESS -->
+
+                <div class="form-group full-width">
+
+                    <label for="address">
+                        Address
+                        <span>*</span>
+                    </label>
+
+                    <textarea
+                        id="address"
+                        name="address"
+                        rows="4"
+                        placeholder="Enter supplier address"
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group">
+
+                    <label for="status">
+                        Status
+                        <span>*</span>
+                    </label>
+
+                    <select
+                        id="status"
+                        name="status"
+                        required
+                    >
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="supplier-form-actions">
+
+                    <a
+                        href="{% url 'supplier_list' %}"
+                        class="secondary-button"
+                    >
+                        Cancel
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                    >
+                        Save Supplier
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+

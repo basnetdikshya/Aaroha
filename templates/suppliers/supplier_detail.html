@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Supplier Details
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <a
+                    href="{% url 'supplier_list' %}"
+                    class="back-link"
+                >
+                    ← Back to Suppliers
+                </a>
+
+                <span class="section-label">
+                    SUPPLIER MANAGEMENT
+                </span>
+
+                <h1>
+                    Supplier Details
+                </h1>
+
+                <p>
+                    View supplier contact and business information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="supplier-detail-layout">
+
+            <div class="supplier-detail-card">
+
+                <div class="supplier-detail-heading">
+
+                    <div>
+
+                        <span class="supplier-detail-label">
+                            SUPPLIER
+                        </span>
+
+                        <h2>
+                            {{ supplier.name }}
+                        </h2>
+
+                    </div>
+
+
+                    <span
+                        class="supplier-status status-{{ supplier.status|lower }}"
+                    >
+                        {{ supplier.status }}
+                    </span>
+
+                </div>
+
+
+                <div class="supplier-detail-information">
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Company
+                        </span>
+
+                        <strong>
+                            {% if supplier.company_name %}
+                                {{ supplier.company_name }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Phone
+                        </span>
+
+                        <strong>
+                            {{ supplier.phone }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Email
+                        </span>
+
+                        <strong>
+                            {% if supplier.email %}
+                                {{ supplier.email }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            City
+                        </span>
+
+                        <strong>
+                            {{ supplier.city }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Address
+                        </span>
+
+                        <strong>
+                            {{ supplier.address }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="supplier-detail-card">
+
+                <h2>
+                    Supplier Information
+                </h2>
+
+
+                <div class="supplier-detail-information">
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+                            {{ supplier.status }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Added On
+                        </span>
+
+                        <strong>
+                            {{ supplier.created_at|date:"M d, Y" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="supplier-detail-row">
+
+                        <span>
+                            Last Updated
+                        </span>
+
+                        <strong>
+                            {{ supplier.updated_at|date:"M d, Y" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="supplier-detail-actions">
+
+                    <a
+                        href="{% url 'edit_supplier' supplier.id %}"
+                        class="primary-button"
+                    >
+                        Edit Supplier
+                    </a>
+
+                    <a
+                        href="{% url 'delete_supplier' supplier.id %}"
+                        class="danger-button"
+                    >
+                        Delete Supplier
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
