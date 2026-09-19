@@ -103,3 +103,66 @@ def update_stock(request, pk):
     return render(request, 'pages/update_stock.html', {
         'product': product
     })
+
+    # =========================================================
+# UPDATE PRODUCT STOCK
+# =========================================================
+
+@login_required
+def update_stock(request, pk):
+
+    # Superuser can access
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        # Get user profile
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+            return redirect('login')
+
+        # Only owner and staff can update stock
+        if profile.role not in ['owner', 'staff']:
+            return redirect('login')
+
+    # Get selected product
+    product = get_object_or_404(
+        Product,
+        pk=pk
+    )
+
+    # Update stock after form submission
+    if request.method == 'POST':
+
+        new_stock = request.POST.get('stock', '').strip()
+
+        if new_stock.isdigit():
+
+            product.stock = int(new_stock)
+            product.save()
+
+            return redirect('inventory')
+
+        error = 'Please enter a valid stock quantity.'
+
+        return render(
+            request,
+            'products/update_stock.html',
+            {
+                'product': product,
+                'error': error,
+            }
+        )
+
+    return render(
+        request,
+        'products/update_stock.html',
+        {
+            'product': product,
+        }
+    )

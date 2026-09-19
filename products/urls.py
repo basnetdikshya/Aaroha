@@ -3,7 +3,8 @@ from . import views
 
 
 urlpatterns = [
-     path(
+
+    path(
         '',
         views.product_list,
         name='products'
@@ -16,14 +17,14 @@ urlpatterns = [
     ),
 
     path(
+        'inventory/update/<int:pk>/',
+        views.update_stock,
+        name='update_stock'
+    ),
+
+    path(
         '<int:pk>/',
         views.product_detail,
         name='product_detail'
-    ),
-
-       path(
-        'update-stock/<int:pk>/',
-        views.update_stock,
-        name='update_stock'
     ),
 ]

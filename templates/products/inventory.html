@@ -144,6 +144,8 @@ AAROHA | Inventory Management
 
                             <th>Status</th>
 
+                            <th>Action</th>
+
                         </tr>
 
                     </thead>
@@ -218,6 +220,17 @@ AAROHA | Inventory Management
                                 {% endif %}
 
                             </td>
+
+                            <td>
+
+    <a
+        href="{% url 'update_stock' product.id %}"
+        class="update-stock-button"
+    >
+        Update
+    </a>
+
+</td>
 
                         </tr>
 

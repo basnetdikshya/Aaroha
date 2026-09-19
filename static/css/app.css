@@ -4579,3 +4579,120 @@ textarea:focus-visible {
     }
 
 }
+
+/* =========================================================
+   UPDATE STOCK
+========================================================= */
+
+.update-stock-button {
+    display: inline-block;
+    padding: 7px 12px;
+
+    border-radius: 7px;
+    background: #1F5D42;
+    color: #FFFFFF;
+
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.update-stock-button:hover {
+    background: #174832;
+}
+
+.stock-update-card {
+    max-width: 550px;
+    padding: 28px;
+
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+}
+
+.stock-update-card h2 {
+    margin: 0 0 22px;
+
+    color: #26332D;
+    font-size: 22px;
+}
+
+.current-stock-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+    padding: 18px;
+
+    background: #FAF8F2;
+    border: 1px solid #DDE5DF;
+    border-radius: 8px;
+}
+
+.current-stock-box span {
+    color: #718078;
+    font-size: 13px;
+}
+
+.current-stock-box strong {
+    color: #1F5D42;
+    font-size: 18px;
+}
+
+.stock-form-group {
+    margin-bottom: 18px;
+}
+
+.stock-form-group label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #26332D;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.stock-form-group input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px;
+
+    border: 1px solid #DDE5DF;
+    border-radius: 8px;
+
+    color: #26332D;
+    background: #FFFFFF;
+    font-size: 14px;
+}
+
+.stock-form-group input:focus {
+    outline: none;
+    border-color: #1F5D42;
+}
+
+.stock-error {
+    margin-bottom: 18px;
+    padding: 12px;
+
+    border-radius: 8px;
+    background: #FDEAEA;
+    color: #D9534F;
+
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+
+    .stock-update-card {
+        padding: 20px;
+    }
+
+    .current-stock-box {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+}
