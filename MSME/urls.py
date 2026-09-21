@@ -77,7 +77,9 @@ urlpatterns = [
 
     path('orders/', include('orders.urls')),
 
-     path( 'suppliers/',include('suppliers.urls')),
+    path( 'suppliers/',include('suppliers.urls')),
+
+    path('purchases/', include('purchases.urls')),
 
 ]
 

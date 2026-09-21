@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Delete Purchase | AAROHA
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-header">
+
+    <div>
+
+        <h1>Delete Purchase</h1>
+
+        <p>
+            Confirm whether you want to permanently delete this purchase.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="purchase-delete-container">
+
+    <div class="purchase-delete-card">
+
+        <div class="purchase-delete-icon">
+            !
+        </div>
+
+
+        <h2>
+            Delete Purchase #{{ purchase.id }}?
+        </h2>
+
+
+        <p class="purchase-delete-warning">
+
+            This action cannot be undone.
+
+            {% if purchase.status == 'Received' %}
+
+            Because this purchase has already been received,
+            its purchased quantity will also be removed from inventory.
+
+            {% endif %}
+
+        </p>
+
+
+        <div class="purchase-delete-details">
+
+            <div>
+
+                <span>
+                    Supplier
+                </span>
+
+                <strong>
+                    {{ purchase.supplier.name }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Purchase Date
+                </span>
+
+                <strong>
+                    {{ purchase.purchase_date|date:"M d, Y" }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Status
+                </span>
+
+                <strong>
+                    {{ purchase.status }}
+                </strong>
+
+            </div>
+
+
+            <div>
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    Rs. {{ purchase.total_amount }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        {% if purchase.status == 'Received' %}
+
+        <div class="purchase-delete-stock-warning">
+
+            <strong>
+                Inventory Impact
+            </strong>
+
+            <p>
+                This purchase is marked as Received.
+                Deleting it will remove the purchased quantities
+                from the related product stock.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="purchase-delete-actions">
+
+            <a
+                href="{% url 'purchase_detail' purchase.id %}"
+                class="secondary-button"
+            >
+                Cancel
+            </a>
+
+
+            <form
+                method="POST"
+                action="{% url 'delete_purchase' purchase.id %}"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="danger-button"
+                >
+                    Yes, Delete Purchase
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

@@ -1,0 +1,578 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Edit Purchase | AAROHA
+{% endblock %}
+
+{% block content %}
+
+<section class="page-section">
+
+```
+<div class="container">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <a
+                href="{% url 'purchase_detail' purchase.id %}"
+                class="back-link"
+            >
+                ← Back to Purchase
+            </a>
+
+            <span class="section-label">
+                PURCHASE MANAGEMENT
+            </span>
+
+            <h1>
+                Edit Purchase #{{ purchase.id }}
+            </h1>
+
+            <p>
+                Update supplier, products, quantities and purchase information.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ERROR MESSAGE -->
+
+    {% if error %}
+
+    <div class="form-error-message">
+        {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <div class="purchase-form-container">
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- ==========================================
+                 PURCHASE INFORMATION
+            =========================================== -->
+
+            <div class="purchase-form-card">
+
+                <div class="purchase-form-card-header">
+
+                    <h2>
+                        Purchase Information
+                    </h2>
+
+                    <p>
+                        Update the basic purchase details.
+                    </p>
+
+                </div>
+
+
+                <div class="purchase-form-grid">
+
+
+                    <!-- SUPPLIER -->
+
+                    <div class="form-group">
+
+                        <label for="supplier">
+                            Supplier
+                            <span>*</span>
+                        </label>
+
+                        <select
+                            name="supplier"
+                            id="supplier"
+                            required
+                        >
+
+                            <option value="">
+                                Select Supplier
+                            </option>
+
+                            {% for supplier in suppliers %}
+
+                            <option
+                                value="{{ supplier.id }}"
+                                {% if purchase.supplier.id == supplier.id %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                {{ supplier.name }}
+
+                                {% if supplier.company_name %}
+                                    - {{ supplier.company_name }}
+                                {% endif %}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PURCHASE DATE -->
+
+                    <div class="form-group">
+
+                        <label for="purchase_date">
+                            Purchase Date
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="purchase_date"
+                            id="purchase_date"
+                            value="{{ purchase.purchase_date|date:'Y-m-d' }}"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- STATUS -->
+
+                    <div class="form-group">
+
+                        <label for="status">
+                            Status
+                            <span>*</span>
+                        </label>
+
+                        <select
+                            name="status"
+                            id="status"
+                            required
+                        >
+
+                            <option
+                                value="Pending"
+                                {% if purchase.status == 'Pending' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Pending
+                            </option>
+
+                            <option
+                                value="Received"
+                                {% if purchase.status == 'Received' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Received
+                            </option>
+
+                            <option
+                                value="Cancelled"
+                                {% if purchase.status == 'Cancelled' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- NOTES -->
+
+                    <div class="form-group form-group-full">
+
+                        <label for="notes">
+                            Notes
+                        </label>
+
+                        <textarea
+                            name="notes"
+                            id="notes"
+                            rows="4"
+                            placeholder="Add any notes about this purchase..."
+                        >{{ purchase.notes }}</textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 PURCHASE ITEMS
+            =========================================== -->
+
+            <div class="purchase-form-card">
+
+                <div class="purchase-form-card-header">
+
+                    <div>
+
+                        <h2>
+                            Purchase Items
+                        </h2>
+
+                        <p>
+                            Update products, quantities and cost prices.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        onclick="addPurchaseItem()"
+                    >
+                        + Add Product
+                    </button>
+
+                </div>
+
+
+                <div id="purchase-items-container">
+
+
+                    {% for item in purchase.items.all %}
+
+                    <div class="purchase-item-row">
+
+
+                        <!-- PRODUCT -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Product
+                                <span>*</span>
+                            </label>
+
+                            <select
+                                name="product"
+                                required
+                            >
+
+                                <option value="">
+                                    Select Product
+                                </option>
+
+                                {% for product in products %}
+
+                                <option
+                                    value="{{ product.id }}"
+                                    {% if item.product.id == product.id %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ product.name }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- QUANTITY -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Quantity
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="number"
+                                name="quantity[]"
+                                min="1"
+                                value="{{ item.quantity }}"
+                                required
+                                oninput="calculatePurchaseTotal()"
+                            >
+
+                        </div>
+
+
+                        <!-- COST PRICE -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Cost Price
+                                <span>*</span>
+                            </label>
+
+                            <input
+                                type="number"
+                                name="cost_price[]"
+                                min="0"
+                                step="0.01"
+                                value="{{ item.cost_price }}"
+                                required
+                                oninput="calculatePurchaseTotal()"
+                            >
+
+                        </div>
+
+
+                        <!-- REMOVE -->
+
+                        <div class="purchase-item-remove">
+
+                            <button
+                                type="button"
+                                class="danger-button"
+                                onclick="removePurchaseItem(this)"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div class="purchase-total-box">
+
+                    <span>
+                        Total Purchase Value
+                    </span>
+
+                    <strong id="purchase-total">
+                        Rs. {{ purchase.total_amount }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 ACTIONS
+            =========================================== -->
+
+            <div class="purchase-form-actions">
+
+                <a
+                    href="{% url 'purchase_detail' purchase.id %}"
+                    class="secondary-button"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Update Purchase
+                </button>
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</div>
+```
+
+</section>
+
+<!-- ==========================================
+     JAVASCRIPT
+=========================================== -->
+
+<script>
+
+function calculatePurchaseTotal() {
+
+    const quantities = document.querySelectorAll(
+        'input[name="quantity[]"]'
+    );
+
+    const costPrices = document.querySelectorAll(
+        'input[name="cost_price[]"]'
+    );
+
+    let total = 0;
+
+
+    for (
+        let i = 0;
+        i < quantities.length;
+        i++
+    ) {
+
+        const quantity =
+            parseFloat(quantities[i].value) || 0;
+
+        const costPrice =
+            parseFloat(costPrices[i].value) || 0;
+
+        total += quantity * costPrice;
+
+    }
+
+
+    document.getElementById(
+        'purchase-total'
+    ).textContent =
+        'Rs. ' + total.toFixed(2);
+
+}
+
+
+function addPurchaseItem() {
+
+    const container =
+        document.getElementById(
+            'purchase-items-container'
+        );
+
+    const firstRow =
+        container.querySelector(
+            '.purchase-item-row'
+        );
+
+
+    if (!firstRow) {
+
+        return;
+
+    }
+
+
+    const newRow =
+        firstRow.cloneNode(true);
+
+
+    /*
+        Reset product selection
+    */
+
+    const productSelect =
+        newRow.querySelector(
+            'select[name="product"]'
+        );
+
+    if (productSelect) {
+
+        productSelect.selectedIndex = 0;
+
+    }
+
+
+    /*
+        Reset quantity
+    */
+
+    const quantityInput =
+        newRow.querySelector(
+            'input[name="quantity[]"]'
+        );
+
+    if (quantityInput) {
+
+        quantityInput.value = 1;
+
+    }
+
+
+    /*
+        Reset cost price
+    */
+
+    const costPriceInput =
+        newRow.querySelector(
+            'input[name="cost_price[]"]'
+        );
+
+    if (costPriceInput) {
+
+        costPriceInput.value = '';
+
+    }
+
+
+    container.appendChild(newRow);
+
+    calculatePurchaseTotal();
+
+}
+
+
+function removePurchaseItem(button) {
+
+    const rows =
+        document.querySelectorAll(
+            '.purchase-item-row'
+        );
+
+
+    /*
+        At least one item must remain.
+    */
+
+    if (rows.length <= 1) {
+
+        alert(
+            'At least one purchase item is required.'
+        );
+
+        return;
+
+    }
+
+
+    button
+        .closest('.purchase-item-row')
+        .remove();
+
+
+    calculatePurchaseTotal();
+
+}
+
+
+/*
+    Calculate the total when the page loads.
+*/
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function() {
+
+        calculatePurchaseTotal();
+
+    }
+);
+
+</script>
+
+{% endblock %}

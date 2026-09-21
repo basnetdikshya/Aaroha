@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Purchase Details
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <a
+                    href="{% url 'purchase_list' %}"
+                    class="back-link"
+                >
+                    ← Back to Purchases
+                </a>
+
+                <span class="section-label">
+                    PURCHASE MANAGEMENT
+                </span>
+
+                <h1>
+                    Purchase Details
+                </h1>
+
+                <p>
+                    View complete information about this purchase.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PURCHASE SUMMARY -->
+
+        <div class="purchase-detail-grid">
+
+
+            <div class="purchase-detail-card">
+
+                <div class="purchase-detail-heading">
+
+                    <div>
+
+                        <span class="purchase-detail-label">
+                            PURCHASE
+                        </span>
+
+                        <h2>
+                            #{{ purchase.id }}
+                        </h2>
+
+                    </div>
+
+
+                    <span
+                        class="supplier-status
+                        status-{{ purchase.status|lower }}"
+                    >
+                        {{ purchase.status }}
+                    </span>
+
+                </div>
+
+
+                <div class="purchase-detail-information">
+
+                    <div class="purchase-detail-row">
+
+                        <span>
+                            Supplier
+                        </span>
+
+                        <strong>
+                            {{ purchase.supplier.name }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="purchase-detail-row">
+
+                        <span>
+                            Company
+                        </span>
+
+                        <strong>
+
+                            {% if purchase.supplier.company_name %}
+                                {{ purchase.supplier.company_name }}
+                            {% else %}
+                                —
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="purchase-detail-row">
+
+                        <span>
+                            Purchase Date
+                        </span>
+
+                        <strong>
+                            {{ purchase.purchase_date|date:"M d, Y" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="purchase-detail-row">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+                            {{ purchase.status }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="purchase-detail-row">
+
+                        <span>
+                            Created
+                        </span>
+
+                        <strong>
+                            {{ purchase.created_at|date:"M d, Y H:i" }}
+                        </strong>
+
+                    </div>
+
+
+                    {% if purchase.notes %}
+
+                    <div class="purchase-detail-row">
+
+                        <span>
+                            Notes
+                        </span>
+
+                        <strong>
+                            {{ purchase.notes }}
+                        </strong>
+
+                    </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="purchase-detail-card purchase-total-card">
+
+                <span class="purchase-detail-label">
+                    TOTAL PURCHASE VALUE
+                </span>
+
+                <strong class="purchase-detail-total">
+                    Rs. {{ purchase.total_amount }}
+                </strong>
+
+                <p>
+                    Total value of all products in this purchase.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PURCHASE ITEMS -->
+
+        <div class="purchase-detail-card purchase-items-card">
+
+            <div class="purchase-detail-section-header">
+
+                <div>
+
+                    <h2>
+                        Purchased Products
+                    </h2>
+
+                    <p>
+                        Products included in this purchase.
+                    </p>
+
+                </div>
+
+
+                <div class="suppliers-count">
+
+                    {{ purchase.items.count }}
+                    Item{{ purchase.items.count|pluralize }}
+
+                </div>
+
+            </div>
+
+
+            <div class="suppliers-table-wrapper">
+
+                <table class="suppliers-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                Quantity
+                            </th>
+
+                            <th>
+                                Cost Price
+                            </th>
+
+                            <th>
+                                Subtotal
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in purchase.items.all %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    {{ item.product.name }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+                                {{ item.quantity }}
+                            </td>
+
+
+                            <td>
+                                Rs. {{ item.cost_price }}
+                            </td>
+
+
+                            <td>
+                                Rs. {{ item.subtotal }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+
+                    <tfoot>
+
+                        <tr>
+
+                            <td colspan="3">
+
+                                <strong>
+                                    Total
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    Rs. {{ purchase.total_amount }}
+                                </strong>
+
+                            </td>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+     
+<div class="purchase-detail-actions">
+    <a href="{% url 'edit_purchase' purchase.id %}" class="secondary-button" > Edit Purchase </a>
+
+    {% if purchase.status == 'Pending' %}
+    
+
+    <form
+        method="POST"
+        action="{% url 'update_purchase_status' purchase.id %}"
+    >
+
+        {% csrf_token %}
+
+        <input
+            type="hidden"
+            name="status"
+            value="Received"
+        >
+
+        <button
+            type="submit"
+            class="purchase-received-button"
+        >
+            Mark as Received
+        </button>
+
+    </form>
+
+    {% elif purchase.status == 'Received' %}
+
+    <form
+        method="POST"
+        action="{% url 'update_purchase_status' purchase.id %}"
+    >
+
+        {% csrf_token %}
+
+        <input
+            type="hidden"
+            name="status"
+            value="Cancelled"
+        >
+
+        <button
+            type="submit"
+            class="danger-button"
+        >
+            Mark as Cancelled
+        </button>
+
+    </form>
+
+    {% endif %}
+    <a href="{% url 'delete_purchase' purchase.id %}" class="danger-button" > Delete Purchase </a>
+
+
+    <a
+        href="{% url 'purchase_list' %}"
+        class="secondary-button"
+    >
+        Back to Purchases
+    </a>
+
+</div>
+
+
+
+</section>
+
+{% endblock %}
+

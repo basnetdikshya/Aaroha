@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Purchases
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="section-label">
+                    PURCHASE MANAGEMENT
+                </span>
+
+                <h1>
+                    Purchases
+                </h1>
+
+                <p>
+                    Manage supplier purchases and stock procurement.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <a
+                    href="{% url 'add_purchase' %}"
+                    class="primary-button"
+                >
+                    + Add Purchase
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="supplier-management-card">
+
+            <div class="supplier-management-header">
+
+             </div>    
+             <!-- Purchase Summary -->
+
+<div class="purchase-summary">
+
+
+<div class="purchase-summary-card">
+
+    <span class="purchase-summary-label">
+        Total Purchases
+    </span>
+
+    <strong class="purchase-summary-value">
+        {{ total_purchases }}
+    </strong>
+
+</div>
+
+
+<div class="purchase-summary-card">
+
+    <span class="purchase-summary-label">
+        Received Purchases
+    </span>
+
+    <strong class="purchase-summary-value">
+        {{ received_purchases }}
+    </strong>
+
+</div>
+
+<div class="purchase-summary-card"> 
+    <span class="purchase-summary-label"> Pending Purchases </span> <strong class="purchase-summary-value"> {{ pending_purchases }} </strong> </div> <div class="purchase-summary-card"> <span class="purchase-summary-label"> Cancelled Purchases </span> <strong class="purchase-summary-value"> {{ cancelled_purchases }} </strong> </div>
+
+
+<div class="purchase-summary-card">
+
+    <span class="purchase-summary-label">
+        Total Amount
+    </span>
+
+    <strong class="purchase-summary-value">
+        Rs. {{ total_amount|floatformat:2 }}
+    </strong>
+
+</div>
+
+
+</div>
+
+
+                <div>
+
+                    <h2>
+                        Purchase History
+                    </h2>
+
+                    <p>
+                        View all purchases made from suppliers.
+                    </p>
+
+                </div>
+
+
+                <div class="suppliers-count">
+
+                    {{ purchases|length }}
+                    Purchase{{ purchases|length|pluralize }}
+
+                </div>
+
+            </div>
+
+
+            <!-- ==========================================
+                 PURCHASE SEARCH & FILTERS
+            =========================================== -->
+
+            <div class="purchase-filters">
+
+                <form
+                    method="GET"
+                    class="purchase-filter-form"
+                >
+
+                    <div class="purchase-filter-group">
+
+                        <label for="purchase-search">
+                            Search
+                        </label>
+
+                        <input
+                            type="text"
+                            id="purchase-search"
+                            name="search"
+                            value="{{ search }}"
+                            placeholder="Search supplier or company..."
+                        >
+
+                    </div>
+
+
+                    <div class="purchase-filter-group">
+
+                        <label for="purchase-status">
+                            Status
+                        </label>
+
+                        <select
+                            id="purchase-status"
+                            name="status"
+                        >
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+                            <option
+                                value="Pending"
+                                {% if selected_status == 'Pending' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Pending
+                            </option>
+
+                            <option
+                                value="Received"
+                                {% if selected_status == 'Received' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Received
+                            </option>
+
+                            <option
+                                value="Cancelled"
+                                {% if selected_status == 'Cancelled' %}
+                                    selected
+                                {% endif %}
+                            >
+                                Cancelled
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="purchase-filter-actions">
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+                            Search
+                        </button>
+
+                        <a
+                            href="{% url 'purchase_list' %}"
+                            class="secondary-button"
+                        >
+                            Clear
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- ==========================================
+                 PURCHASE TABLE
+            =========================================== -->
+
+            {% if purchases %}
+
+            <div class="suppliers-table-wrapper">
+
+                <table class="suppliers-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Purchase
+                            </th>
+
+                            <th>
+                                Supplier
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for purchase in purchases %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    #{{ purchase.id }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+                                {{ purchase.supplier.name }}
+                            </td>
+
+
+                            <td>
+                                {{ purchase.purchase_date|date:"M d, Y" }}
+                            </td>
+
+
+                            <td>
+                                Rs. {{ purchase.total_amount }}
+                            </td>
+
+
+                            <td>
+
+                                <span
+                                    class="supplier-status
+                                    status-{{ purchase.status|lower }}"
+                                >
+                                    {{ purchase.status }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                    href="{% url 'purchase_detail' purchase.id %}"
+                                    class="supplier-view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+            {% if purchases.has_other_pages %}
+
+<div class="purchase-pagination">
+
+
+{% if purchases.has_previous %}
+
+    <a
+        href="?page={{ purchases.previous_page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}"
+        class="pagination-button"
+    >
+        ← Previous
+    </a>
+
+{% endif %}
+
+
+<div class="pagination-pages">
+
+    {% for page_number in purchases.paginator.page_range %}
+
+        {% if page_number == purchases.number %}
+
+            <span class="pagination-button active">
+                {{ page_number }}
+            </span>
+
+        {% else %}
+
+            <a
+                href="?page={{ page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}"
+                class="pagination-button"
+            >
+                {{ page_number }}
+            </a>
+
+        {% endif %}
+
+    {% endfor %}
+
+</div>
+
+
+{% if purchases.has_next %}
+
+    <a
+        href="?page={{ purchases.next_page_number }}{% if search %}&search={{ search|urlencode }}{% endif %}{% if selected_status %}&status={{ selected_status|urlencode }}{% endif %}"
+        class="pagination-button"
+    >
+        Next →
+    </a>
+
+{% endif %}
+
+
+</div>
+
+{% endif %}
+
+
+
+            {% else %}
+
+            <!-- ==========================================
+                 EMPTY RESULT
+            =========================================== -->
+
+            <div class="empty-suppliers">
+
+                <div class="empty-suppliers-icon">
+                    📦
+                </div>
+
+                <h3>
+                    No Purchases Found
+                </h3>
+
+                {% if search or selected_status %}
+
+                <p>
+                    No purchases match your current search or filter.
+                </p>
+
+                <a
+                    href="{% url 'purchase_list' %}"
+                    class="secondary-button"
+                >
+                    Clear Filters
+                </a>
+
+                {% else %}
+
+                <p>
+                    Add your first purchase to start managing procurement.
+                </p>
+
+                <a
+                    href="{% url 'add_purchase' %}"
+                    class="primary-button"
+                >
+                    + Add Purchase
+                </a>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+

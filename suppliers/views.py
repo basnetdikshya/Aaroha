@@ -55,6 +55,11 @@ def add_supplier(request):
 
     if request.method == 'POST':
 
+        print("===================================")
+        print("SUPPLIER FORM SUBMITTED")
+        print("POST DATA:", request.POST)
+        print("===================================")
+
         name = request.POST.get('name', '').strip()
         company_name = request.POST.get('company_name', '').strip()
         phone = request.POST.get('phone', '').strip()
@@ -63,7 +68,15 @@ def add_supplier(request):
         city = request.POST.get('city', '').strip()
         status = request.POST.get('status', 'Active').strip()
 
-        Supplier.objects.create(
+        print("Name:", name)
+        print("Company:", company_name)
+        print("Phone:", phone)
+        print("Email:", email)
+        print("Address:", address)
+        print("City:", city)
+        print("Status:", status)
+
+        supplier = Supplier.objects.create(
             name=name,
             company_name=company_name,
             phone=phone,
@@ -72,6 +85,9 @@ def add_supplier(request):
             city=city,
             status=status
         )
+
+        print("SUPPLIER SAVED:", supplier.id)
+        print("SUPPLIER NAME:", supplier.name)
 
         return redirect('supplier_list')
 
