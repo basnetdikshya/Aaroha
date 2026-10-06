@@ -1,0 +1,562 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Sales Management
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =====================================================
+   SALES MANAGEMENT
+===================================================== */
+
+.sales-statistics {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 18px !important;
+    margin-bottom: 24px !important;
+}
+
+.sales-stat-card {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+
+    padding: 22px !important;
+
+    background: #FFFFFF !important;
+    border: 1px solid #DDE5DF !important;
+    border-radius: 12px !important;
+}
+
+.sales-stat-icon {
+    width: 48px !important;
+    height: 48px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    background: #E8F3EC !important;
+    color: #1F5D42 !important;
+
+    border-radius: 10px !important;
+
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+}
+
+.sales-stat-card span {
+    display: block !important;
+
+    margin-bottom: 5px !important;
+
+    color: #718078 !important;
+    font-size: 13px !important;
+}
+
+.sales-stat-card strong {
+    display: block !important;
+
+    color: #26332D !important;
+    font-size: 20px !important;
+}
+
+
+/* =====================================================
+   SALES CARD
+===================================================== */
+
+.sales-card {
+    background: #FFFFFF !important;
+
+    border: 1px solid #DDE5DF !important;
+    border-radius: 12px !important;
+
+    overflow: hidden !important;
+}
+
+.sales-card-header {
+    padding: 24px !important;
+
+    border-bottom: 1px solid #DDE5DF !important;
+}
+
+.sales-card-header h2 {
+    margin: 0 0 6px !important;
+
+    color: #26332D !important;
+}
+
+.sales-card-header p {
+    margin: 0 !important;
+
+    color: #718078 !important;
+}
+
+
+/* =====================================================
+   SALES TABLE
+===================================================== */
+
+.sales-table-wrapper {
+    width: 100% !important;
+
+    overflow-x: auto !important;
+}
+
+.sales-table {
+    width: 100% !important;
+
+    border-collapse: collapse !important;
+}
+
+.sales-table th {
+    padding: 15px 18px !important;
+
+    background: #FAF8F2 !important;
+    color: #718078 !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+
+    text-align: left !important;
+
+    white-space: nowrap !important;
+}
+
+.sales-table td {
+    padding: 16px 18px !important;
+
+    border-top: 1px solid #DDE5DF !important;
+
+    color: #26332D !important;
+
+    font-size: 14px !important;
+}
+
+.sales-table tr:hover {
+    background: #FAF8F2 !important;
+}
+
+
+/* =====================================================
+   SALES STATUS
+===================================================== */
+
+.sales-status {
+    display: inline-block !important;
+
+    padding: 5px 10px !important;
+
+    border-radius: 6px !important;
+
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+.sales-status.pending {
+    background: #FFF7E6 !important;
+    color: #8A5A00 !important;
+}
+
+.sales-status.confirmed {
+    background: #E8F3EC !important;
+    color: #1F5D42 !important;
+}
+
+.sales-status.processing {
+    background: #E8F3EC !important;
+    color: #1F5D42 !important;
+}
+
+.sales-status.shipped {
+    background: #EAF3F7 !important;
+    color: #4A90A4 !important;
+}
+
+.sales-status.delivered {
+    background: #E8F3EC !important;
+    color: #2E8B57 !important;
+}
+
+.sales-status.cancelled {
+    background: #FDECEC !important;
+    color: #D9534F !important;
+}
+
+
+/* =====================================================
+   VIEW BUTTON
+===================================================== */
+
+.sales-view-button {
+    display: inline-block !important;
+
+    padding: 7px 12px !important;
+
+    background: #1F5D42 !important;
+    color: #FFFFFF !important;
+
+    border-radius: 6px !important;
+
+    text-decoration: none !important;
+
+    font-size: 13px !important;
+    font-weight: 600 !important;
+}
+
+.sales-view-button:hover {
+    background: #174832 !important;
+}
+
+
+/* =====================================================
+   EMPTY SALES
+===================================================== */
+
+.sales-empty {
+    padding: 60px 20px !important;
+
+    text-align: center !important;
+}
+
+.sales-empty > div {
+    font-size: 42px !important;
+
+    margin-bottom: 12px !important;
+}
+
+.sales-empty h3 {
+    margin: 0 0 8px !important;
+
+    color: #26332D !important;
+}
+
+.sales-empty p {
+    margin: 0 !important;
+
+    color: #718078 !important;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+    .sales-statistics {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .sales-statistics {
+        grid-template-columns: 1fr !important;
+    }
+
+    .sales-stat-card {
+        padding: 18px !important;
+    }
+
+    .sales-card-header {
+        padding: 18px !important;
+    }
+
+    .sales-table th,
+    .sales-table td {
+        padding: 12px !important;
+    }
+
+}
+
+</style>
+
+
+<section class="page-section">
+
+    <div class="container">
+
+
+        <!-- ==============================
+             PAGE HEADER
+        =============================== -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="section-label">
+                    SALES
+                </span>
+
+                <h1>
+                    Sales Management
+                </h1>
+
+                <p>
+                    Monitor sales and customer orders.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==============================
+             SALES STATISTICS
+        =============================== -->
+
+        <div class="sales-statistics">
+
+
+            <!-- Total Sales -->
+
+            <div class="sales-stat-card">
+
+                <div class="sales-stat-icon">
+                    Rs.
+                </div>
+
+                <div>
+
+                    <span>
+                        Total Sales
+                    </span>
+
+                    <strong>
+                        Rs. {{ total_sales|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Today's Sales -->
+
+            <div class="sales-stat-card">
+
+                <div class="sales-stat-icon">
+                    T
+                </div>
+
+                <div>
+
+                    <span>
+                        Today's Sales
+                    </span>
+
+                    <strong>
+                        Rs. {{ today_sales|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Monthly Sales -->
+
+            <div class="sales-stat-card">
+
+                <div class="sales-stat-icon">
+                    M
+                </div>
+
+                <div>
+
+                    <span>
+                        This Month
+                    </span>
+
+                    <strong>
+                        Rs. {{ month_sales|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Total Orders -->
+
+            <div class="sales-stat-card">
+
+                <div class="sales-stat-icon">
+                    #
+                </div>
+
+                <div>
+
+                    <span>
+                        Total Orders
+                    </span>
+
+                    <strong>
+                        {{ total_orders }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==============================
+             SALES HISTORY
+        =============================== -->
+
+        <div class="sales-card">
+
+            <div class="sales-card-header">
+
+                <div>
+
+                    <h2>
+                        Sales History
+                    </h2>
+
+                    <p>
+                        Recent customer orders and sales.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if orders %}
+
+            <div class="sales-table-wrapper">
+
+                <table class="sales-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order ID
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for order in orders %}
+
+                        <tr>
+
+                            <td>
+
+                                <strong>
+                                    #{{ order.id }}
+                                </strong>
+
+                            </td>
+
+
+                            <td>
+                                {{ order.customer_name }}
+                            </td>
+
+
+                            <td>
+                                {{ order.created_at|date:"M d, Y" }}
+                            </td>
+
+
+                            <td>
+                                Rs. {{ order.total_amount|floatformat:2 }}
+                            </td>
+
+
+                            <td>
+
+                                <span class="sales-status {{ order.status|lower }}">
+                                    {{ order.status }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <a
+                                   href="{% url 'sales_detail' order.id %}"
+                                   class="sales-view-button"
+                                >
+                                    View
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            {% else %}
+
+            <div class="sales-empty">
+
+                <div>
+                    📊
+                </div>
+
+                <h3>
+                    No Sales Yet
+                </h3>
+
+                <p>
+                    Customer orders will appear here.
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

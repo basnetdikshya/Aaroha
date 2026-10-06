@@ -1,8 +1,10 @@
 
+from urllib import request
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-
+from django.core.paginator import Paginator
 from .models import Order, OrderItem
 from products.models import Product
 
@@ -219,27 +221,54 @@ def order_detail(request, order_id):
 # ORDER MANAGEMENT
 # =========================================================
 
+
 @login_required
 def order_management(request):
 
     # Only superuser / owner / staff can manage orders
-
     if request.user.is_superuser:
         pass
-
     else:
-
         try:
             profile = request.user.userprofile
-
         except Exception:
             return redirect('home')
 
         if profile.role not in ['owner', 'staff']:
             return redirect('home')
 
+    # Get search and filter values from URL
+    search = request.GET.get('search', '').strip()
+    status_filter = request.GET.get('status', '').strip()
+
     # Get all orders, newest first
     orders = Order.objects.all().order_by('-created_at')
+
+    # Search by Order ID, Customer Name, or Phone
+    if search:
+        from django.db.models import Q
+
+        orders = orders.filter(
+            Q(id__icontains=search) |
+            Q(customer_name__icontains=search) |
+            Q(phone__icontains=search)
+        )
+
+    # Filter by order status
+    if status_filter:
+        orders = orders.filter(status=status_filter)
+
+    # Summary counts based on current search/filter results
+    total_orders = orders.count()
+    pending_orders = orders.filter(status='Pending').count()
+    processing_orders = orders.filter(status='Processing').count()
+    delivered_orders = orders.filter(status='Delivered').count()
+    cancelled_orders = orders.filter(status='Cancelled').count()
+
+    # Pagination - 10 orders per page
+    paginator = Paginator(orders, 10) 
+    page_number = request.GET.get('page') 
+    orders_page = paginator.get_page(page_number)
 
     # Send status choices to template
     status_choices = Order.STATUS_CHOICES
@@ -250,8 +279,19 @@ def order_management(request):
         {
             'orders': orders,
             'status_choices': status_choices,
+            'search': search,
+            'status_filter': status_filter,
+
+            # Summary card data
+            'total_orders': total_orders,
+            'pending_orders': pending_orders,
+            'processing_orders': processing_orders,
+            'delivered_orders': delivered_orders,
+            'cancelled_orders': cancelled_orders,
         }
     )
+
+
 
 
 # =========================================================
@@ -302,3 +342,44 @@ def update_order_status(request, order_id):
 
     return redirect('order_management')
 
+
+# =========================================================
+
+# OWNER / STAFF ORDER DETAIL
+
+# =========================================================
+
+@login_required
+def order_management_detail(request, order_id):
+
+# Only superuser / owner / staff can view managed orders
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = request.user.userprofile
+
+        except Exception:
+            return redirect('home')
+
+        if profile.role not in ['owner', 'staff']:
+            return redirect('home')
+
+    # Get the order
+
+    order = get_object_or_404(
+        Order,
+        id=order_id
+    )
+
+    return render(
+        request,
+        'orders/order_management_detail.html',
+        {
+            'order': order,
+            'status_choices': Order.STATUS_CHOICES,
+        }
+    )

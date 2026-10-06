@@ -1,0 +1,581 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Sales Detail
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =====================================================
+   SALES DETAIL
+===================================================== */
+
+.sales-detail-header {
+    margin-bottom: 24px;
+}
+
+.sales-detail-header .back-link {
+    display: inline-block;
+    margin-bottom: 12px;
+
+    color: #1F5D42;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sales-detail-header .back-link:hover {
+    color: #174832;
+}
+
+.sales-detail-header h1 {
+    margin: 0 0 6px;
+    color: #26332D;
+}
+
+.sales-detail-header p {
+    margin: 0;
+    color: #718078;
+}
+
+
+/* =====================================================
+   ORDER INFORMATION
+===================================================== */
+
+.sales-detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+}
+
+.sales-detail-card {
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.sales-detail-card-header {
+    padding: 22px 24px;
+    border-bottom: 1px solid #DDE5DF;
+}
+
+.sales-detail-card-header h2 {
+    margin: 0 0 5px;
+    color: #26332D;
+    font-size: 20px;
+}
+
+.sales-detail-card-header p {
+    margin: 0;
+    color: #718078;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   CUSTOMER INFORMATION
+===================================================== */
+
+.sales-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+
+    padding: 24px;
+}
+
+.sales-info-item span {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #718078;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sales-info-item strong {
+    color: #26332D;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   ITEMS TABLE
+===================================================== */
+
+.sales-items-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sales-items-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sales-items-table th {
+    padding: 14px 18px;
+
+    background: #FAF8F2;
+    color: #718078;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-align: left;
+    white-space: nowrap;
+}
+
+.sales-items-table td {
+    padding: 15px 18px;
+
+    border-top: 1px solid #DDE5DF;
+
+    color: #26332D;
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.sales-detail-status {
+    display: inline-block;
+
+    padding: 6px 11px;
+
+    border-radius: 6px;
+
+    background: #E8F3EC;
+    color: #1F5D42;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.sales-summary {
+    padding: 24px;
+}
+
+.sales-summary-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 10px 0;
+
+    color: #718078;
+    font-size: 14px;
+}
+
+.sales-summary-row strong {
+    color: #26332D;
+}
+
+.sales-summary-divider {
+    height: 1px;
+
+    margin: 8px 0;
+
+    background: #DDE5DF;
+}
+
+.sales-summary-total {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding-top: 12px;
+
+    color: #26332D;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sales-summary-total strong {
+    color: #1F5D42;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .sales-detail-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .sales-info-grid {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+
+    .sales-detail-card-header {
+        padding: 18px;
+    }
+
+    .sales-summary {
+        padding: 18px;
+    }
+
+    .sales-items-table th,
+    .sales-items-table td {
+        padding: 12px;
+    }
+
+}
+
+</style>
+
+
+<section class="page-section">
+
+    <div class="container">
+
+
+        <!-- ==============================
+             PAGE HEADER
+        =============================== -->
+
+        <div class="sales-detail-header">
+
+            <a
+                href="{% url 'sales_management' %}"
+                class="back-link"
+            >
+                ← Back to Sales
+            </a>
+
+            <h1>
+                Sales Detail
+            </h1>
+
+            <p>
+                Detailed information about Order #{{ order.id }}.
+            </p>
+
+        </div>
+
+
+        <!-- ==============================
+             MAIN LAYOUT
+        =============================== -->
+
+        <div class="sales-detail-layout">
+
+
+            <!-- ==============================
+                 LEFT SIDE
+            =============================== -->
+
+            <div>
+
+
+                <!-- CUSTOMER INFORMATION -->
+
+                <div class="sales-detail-card">
+
+                    <div class="sales-detail-card-header">
+
+                        <h2>
+                            Order Information
+                        </h2>
+
+                        <p>
+                            Customer and order details.
+                        </p>
+
+                    </div>
+
+
+                    <div class="sales-info-grid">
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                Order ID
+                            </span>
+
+                            <strong>
+                                #{{ order.id }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                Order Date
+                            </span>
+
+                            <strong>
+                                {{ order.created_at|date:"M d, Y H:i" }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                Customer Name
+                            </span>
+
+                            <strong>
+                                {{ order.customer_name }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                Phone
+                            </span>
+
+                            <strong>
+                                {{ order.phone }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                City
+                            </span>
+
+                            <strong>
+                                {{ order.city }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong>
+                                <span class="sales-detail-status">
+                                    {{ order.status }}
+                                </span>
+                            </strong>
+
+                        </div>
+
+
+                        <div class="sales-info-item">
+
+                            <span>
+                                Address
+                            </span>
+
+                            <strong>
+                                {{ order.address }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ORDER ITEMS -->
+
+                <div class="sales-detail-card"
+                     style="margin-top: 24px;">
+
+                    <div class="sales-detail-card-header">
+
+                        <h2>
+                            Products Sold
+                        </h2>
+
+                        <p>
+                            Products included in this order.
+                        </p>
+
+                    </div>
+
+
+                    <div class="sales-items-wrapper">
+
+                        <table class="sales-items-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Product
+                                    </th>
+
+                                    <th>
+                                        Quantity
+                                    </th>
+
+                                    <th>
+                                        Price
+                                    </th>
+
+                                    <th>
+                                        Subtotal
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for item in order.items.all %}
+
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            {{ item.product.name }}
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        {{ item.quantity }}
+                                    </td>
+
+                                    <td>
+                                        Rs. {{ item.price|floatformat:2 }}
+                                    </td>
+
+                                    <td>
+                                        Rs. {{ item.subtotal|floatformat:2 }}
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================
+                 RIGHT SIDE
+            =============================== -->
+
+            <div class="sales-detail-card">
+
+                <div class="sales-detail-card-header">
+
+                    <h2>
+                        Sales Summary
+                    </h2>
+
+                    <p>
+                        Order payment summary.
+                    </p>
+
+                </div>
+
+
+                <div class="sales-summary">
+
+                    <div class="sales-summary-row">
+
+                        <span>
+                            Order
+                        </span>
+
+                        <strong>
+                            #{{ order.id }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="sales-summary-row">
+
+                        <span>
+                            Items
+                        </span>
+
+                        <strong>
+                            {{ order.items.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="sales-summary-row">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+                            {{ order.status }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="sales-summary-divider">
+                    </div>
+
+
+                    <div class="sales-summary-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            Rs. {{ order.total_amount|floatformat:2 }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

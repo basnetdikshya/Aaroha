@@ -6238,3 +6238,305 @@ color: #FFFFFF;
 
 }
 
+
+/* =====================================================
+   CART STOCK MESSAGES
+===================================================== */
+
+.cart-error {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 14px 18px;
+    background: #FDECEC;
+    border: 1px solid #F1B8B8;
+    color: #B42318;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.cart-stock {
+    margin-top: 6px;
+    color: #718078;
+    font-size: 13px;
+}
+
+.cart-stock-warning {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: #FFF7E6;
+    border: 1px solid #E6A93A;
+    color: #8A5A00;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   SALES MANAGEMENT
+===================================================== */
+
+/* ==============================
+   SALES STATISTICS
+============================== */
+
+.sales-statistics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.sales-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 22px;
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+}
+
+.sales-stat-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #E8F3EC;
+    color: #1F5D42;
+
+    border-radius: 10px;
+
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sales-stat-card span {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #718078;
+    font-size: 13px;
+}
+
+.sales-stat-card strong {
+    display: block;
+
+    color: #26332D;
+    font-size: 20px;
+}
+
+
+/* ==============================
+   SALES CARD
+============================== */
+
+.sales-card {
+    background: #FFFFFF;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.sales-card-header {
+    padding: 24px;
+    border-bottom: 1px solid #DDE5DF;
+}
+
+.sales-card-header h2 {
+    margin: 0 0 6px;
+
+    color: #26332D;
+    font-size: 20px;
+}
+
+.sales-card-header p {
+    margin: 0;
+
+    color: #718078;
+    font-size: 14px;
+}
+
+
+/* ==============================
+   SALES TABLE
+============================== */
+
+.sales-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sales-table th {
+    padding: 15px 18px;
+
+    background: #FAF8F2;
+    color: #718078;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-align: left;
+    white-space: nowrap;
+}
+
+.sales-table td {
+    padding: 16px 18px;
+
+    border-top: 1px solid #DDE5DF;
+
+    color: #26332D;
+
+    font-size: 14px;
+}
+
+.sales-table tr:hover {
+    background: #FAF8F2;
+}
+
+
+/* ==============================
+   SALES STATUS
+============================== */
+
+.sales-status {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sales-status.pending {
+    background: #FFF7E6;
+    color: #8A5A00;
+}
+
+.sales-status.confirmed {
+    background: #E8F3EC;
+    color: #1F5D42;
+}
+
+.sales-status.processing {
+    background: #E8F3EC;
+    color: #1F5D42;
+}
+
+.sales-status.shipped {
+    background: #EAF3F7;
+    color: #4A90A4;
+}
+
+.sales-status.delivered {
+    background: #E8F3EC;
+    color: #2E8B57;
+}
+
+.sales-status.cancelled {
+    background: #FDECEC;
+    color: #D9534F;
+}
+
+
+/* ==============================
+   VIEW BUTTON
+============================== */
+
+.sales-view-button {
+    display: inline-block;
+
+    padding: 7px 12px;
+
+    background: #1F5D42;
+    color: #FFFFFF;
+
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.sales-view-button:hover {
+    background: #174832;
+}
+
+
+/* ==============================
+   EMPTY SALES
+============================== */
+
+.sales-empty {
+    padding: 60px 20px;
+
+    text-align: center;
+}
+
+.sales-empty > div {
+    margin-bottom: 12px;
+
+    font-size: 42px;
+}
+
+.sales-empty h3 {
+    margin: 0 0 8px;
+
+    color: #26332D;
+}
+
+.sales-empty p {
+    margin: 0;
+
+    color: #718078;
+}
+
+
+/* =====================================================
+   RESPONSIVE DESIGN
+===================================================== */
+
+/* Tablet */
+
+@media (max-width: 1000px) {
+
+    .sales-statistics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .sales-statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .sales-stat-card {
+        padding: 18px;
+    }
+
+    .sales-card-header {
+        padding: 18px;
+    }
+
+    .sales-table th,
+    .sales-table td {
+        padding: 12px;
+    }
+
+}

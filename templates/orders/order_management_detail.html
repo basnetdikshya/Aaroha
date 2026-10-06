@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Order #{{ order.id }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding: 40px 0;">
+
+
+<!-- PAGE HEADER -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+
+    <div>
+        <h1 style="margin: 0; color: #1F5D42;">
+            Order #{{ order.id }}
+        </h1>
+
+        <p style="margin-top: 8px; color: #718078;">
+            View and manage customer order details.
+        </p>
+    </div>
+
+    <a href="{% url 'order_management' %}"
+       style="
+            text-decoration: none;
+            background: #E8F3EC;
+            color: #1F5D42;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 600;
+       ">
+        ← Back to Orders
+    </a>
+
+</div>
+
+
+<!-- ORDER INFORMATION -->
+<div style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+">
+
+    <!-- CUSTOMER -->
+    <div style="
+        background: white;
+        border: 1px solid #DDE5DF;
+        border-radius: 12px;
+        padding: 22px;
+    ">
+
+        <h3 style="margin-top: 0; color: #1F5D42;">
+            Customer Information
+        </h3>
+
+        <p>
+            <strong>Name:</strong>
+            {{ order.customer_name }}
+        </p>
+
+        <p>
+            <strong>Phone:</strong>
+            {{ order.phone }}
+        </p>
+
+        <p>
+            <strong>City:</strong>
+            {{ order.city }}
+        </p>
+
+    </div>
+
+
+    <!-- DELIVERY ADDRESS -->
+    <div style="
+        background: white;
+        border: 1px solid #DDE5DF;
+        border-radius: 12px;
+        padding: 22px;
+    ">
+
+        <h3 style="margin-top: 0; color: #1F5D42;">
+            Delivery Address
+        </h3>
+
+        <p style="line-height: 1.6;">
+            {{ order.address }}
+        </p>
+
+    </div>
+
+
+    <!-- ORDER STATUS -->
+    <div style="
+        background: white;
+        border: 1px solid #DDE5DF;
+        border-radius: 12px;
+        padding: 22px;
+    ">
+
+        <h3 style="margin-top: 0; color: #1F5D42;">
+            Order Status
+        </h3>
+
+        <form method="POST"
+              action="{% url 'update_order_status' order.id %}">
+
+            {% csrf_token %}
+
+            <select name="status"
+                    onchange="this.form.submit()"
+                    style="
+                        width: 100%;
+                        padding: 11px;
+                        border: 1px solid #DDE5DF;
+                        border-radius: 8px;
+                        font-size: 15px;
+                        background: #FAF8F2;
+                    ">
+
+                {% for value, label in status_choices %}
+
+                    <option value="{{ value }}"
+                        {% if order.status == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+        </form>
+
+        <p style="
+            margin-top: 12px;
+            color: #718078;
+            font-size: 14px;
+        ">
+            Current status:
+            <strong>{{ order.status }}</strong>
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- ORDER DETAILS -->
+<div style="
+    background: white;
+    border: 1px solid #DDE5DF;
+    border-radius: 12px;
+    padding: 25px;
+">
+
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    ">
+
+        <div>
+            <h2 style="
+                margin: 0;
+                color: #26332D;
+            ">
+                Order Items
+            </h2>
+
+            <p style="
+                margin: 6px 0 0;
+                color: #718078;
+            ">
+                Order placed on {{ order.created_at|date:"M d, Y, h:i A" }}
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ITEMS TABLE -->
+    <div style="overflow-x: auto;">
+
+        <table style="
+            width: 100%;
+            border-collapse: collapse;
+        ">
+
+            <thead>
+
+                <tr style="
+                    background: #E8F3EC;
+                    color: #1F5D42;
+                ">
+
+                    <th style="
+                        padding: 14px;
+                        text-align: left;
+                    ">
+                        Product
+                    </th>
+
+                    <th style="
+                        padding: 14px;
+                        text-align: center;
+                    ">
+                        Quantity
+                    </th>
+
+                    <th style="
+                        padding: 14px;
+                        text-align: right;
+                    ">
+                        Price
+                    </th>
+
+                    <th style="
+                        padding: 14px;
+                        text-align: right;
+                    ">
+                        Subtotal
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in order.items.all %}
+
+                <tr style="
+                    border-bottom: 1px solid #DDE5DF;
+                ">
+
+                    <td style="padding: 15px;">
+
+                        <strong style="color: #26332D;">
+                            {{ item.product.name }}
+                        </strong>
+
+                    </td>
+
+                    <td style="
+                        padding: 15px;
+                        text-align: center;
+                    ">
+                        {{ item.quantity }}
+                    </td>
+
+                    <td style="
+                        padding: 15px;
+                        text-align: right;
+                    ">
+                        Rs. {{ item.price }}
+                    </td>
+
+                    <td style="
+                        padding: 15px;
+                        text-align: right;
+                        font-weight: 600;
+                    ">
+                        Rs. {{ item.subtotal }}
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="4"
+                        style="
+                            padding: 30px;
+                            text-align: center;
+                            color: #718078;
+                        ">
+                        No items found for this order.
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- TOTAL -->
+    <div style="
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 25px;
+    ">
+
+        <div style="
+            min-width: 280px;
+            border-top: 2px solid #1F5D42;
+            padding-top: 15px;
+        ">
+
+            <div style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+
+                <span style="
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #26332D;
+                ">
+                    Total Amount
+                </span>
+
+                <span style="
+                    font-size: 22px;
+                    font-weight: 700;
+                    color: #1F5D42;
+                ">
+                    Rs. {{ order.total_amount }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ORDER DATE INFORMATION -->
+<div style="
+    margin-top: 20px;
+    color: #718078;
+    font-size: 14px;
+">
+
+    <p>
+        Order created:
+        {{ order.created_at|date:"M d, Y, h:i A" }}
+    </p>
+
+    <p>
+        Last updated:
+        {{ order.updated_at|date:"M d, Y, h:i A" }}
+    </p>
+
+</div>
+
+
+</div>
+
+{% endblock %}

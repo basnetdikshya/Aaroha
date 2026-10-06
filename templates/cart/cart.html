@@ -6,40 +6,42 @@ AAROHA | Shopping Cart
 
 {% block content %}
 
-{% if request.session.cart_error %}
-    <div class="cart-error">
-        {{ request.session.cart_error }}
-    </div>
-
-    {% comment %}
-    Remove the error after displaying it.
-    {% endcomment %}
-
-    {% with request.session.cart_error as cart_error %}
-    {% endwith %}
-{% endif %}
-
 {% if error %}
+
     <div class="cart-error">
         {{ error }}
     </div>
+
 {% endif %}
+
 
 <section class="cart-section">
 
     <div class="container">
 
         <!-- Page Header -->
+
         <div class="cart-header">
-            <span class="section-label">SHOPPING CART</span>
-            <h1>Your Shopping Cart</h1>
-            <p>Review your items before proceeding to checkout.</p>
+
+            <span class="section-label">
+                SHOPPING CART
+            </span>
+
+            <h1>
+                Your Shopping Cart
+            </h1>
+
+            <p>
+                Review your items before proceeding to checkout.
+            </p>
+
         </div>
 
 
         {% if cart_items %}
 
         <div class="cart-layout">
+
 
             <!-- ==============================
                  CART ITEMS
@@ -51,7 +53,9 @@ AAROHA | Shopping Cart
 
                 <div class="cart-item">
 
+
                     <!-- Product Image -->
+
                     <div class="cart-product-image">
 
                         {% if item.product.image %}
@@ -73,6 +77,7 @@ AAROHA | Shopping Cart
 
 
                     <!-- Product Information -->
+
                     <div class="cart-product-info">
 
                         <span class="cart-category">
@@ -91,55 +96,110 @@ AAROHA | Shopping Cart
                             Rs. {{ item.product.price }}
                         </p>
 
+                        <p class="cart-stock">
+                            Available:
+                            {{ item.product.stock }}
+                            {{ item.product.unit }}
+                        </p>
+
+
+                        <!-- Stock Warning -->
+
+                        {% if item.product.stock == 0 %}
+
+                            <div class="cart-stock-warning">
+                                This product is currently out of stock.
+                                Please remove it from your cart.
+                            </div>
+
+                        {% elif item.quantity > item.product.stock %}
+
+                            <div class="cart-stock-warning">
+                                Only
+                                {{ item.product.stock }}
+                                {{ item.product.unit }}
+                                available.
+                                Please reduce the quantity.
+                            </div>
+
+                        {% elif item.product.stock <= 10 %}
+
+                            <div class="cart-stock-warning">
+                                Low stock — only
+                                {{ item.product.stock }}
+                                {{ item.product.unit }}
+                                remaining.
+                            </div>
+
+                        {% endif %}
+
                     </div>
 
 
                     <!-- Quantity -->
-             <div class="cart-quantity">
 
-    <span>Quantity</span>
+                    <div class="cart-quantity">
 
-    <form method="POST"
-          action="{% url 'update_cart' item.product.id %}"
-          class="quantity-form">
+                        <span>
+                            Quantity
+                        </span>
 
-        {% csrf_token %}
+                        <form
+                            method="POST"
+                            action="{% url 'update_cart' item.product.id %}"
+                            class="quantity-form"
+                        >
 
-        <div class="quantity-box">
+                            {% csrf_token %}
 
-            <button
-                type="submit"
-                name="quantity"
-                value="{{ item.quantity|add:'-1' }}"
-                {% if item.quantity <= 1 %}disabled{% endif %}
-            >
-                −
-            </button>
+                            <div class="quantity-box">
 
-            <span>
-                {{ item.quantity }}
-            </span>
+                                <!-- Decrease Quantity -->
 
-            <button
-                type="submit"
-                name="quantity"
-                value="{{ item.quantity|add:'1' }}"
-                {% if item.quantity >= item.product.stock %}disabled{% endif %}
-            >
-                +
-            </button>
+                                <button
+                                    type="submit"
+                                    name="quantity"
+                                    value="{{ item.quantity|add:'-1' }}"
+                                    {% if item.quantity <= 1 %}
+                                        disabled
+                                    {% endif %}
+                                >
+                                    −
+                                </button>
 
-        </div>
 
-    </form>
+                                <span>
+                                    {{ item.quantity }}
+                                </span>
 
-</div>
+
+                                <!-- Increase Quantity -->
+
+                                <button
+                                    type="submit"
+                                    name="quantity"
+                                    value="{{ item.quantity|add:'1' }}"
+                                    {% if item.quantity >= item.product.stock %}
+                                        disabled
+                                    {% endif %}
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                    </div>
 
 
                     <!-- Subtotal -->
+
                     <div class="cart-subtotal">
 
-                        <span>Subtotal</span>
+                        <span>
+                            Subtotal
+                        </span>
 
                         <strong>
                             Rs. {{ item.subtotal }}
@@ -149,9 +209,12 @@ AAROHA | Shopping Cart
 
 
                     <!-- Remove -->
+
                     <div class="cart-remove">
 
-                        <a href="{% url 'remove_from_cart' item.product.id %}">
+                        <a
+                            href="{% url 'remove_from_cart' item.product.id %}"
+                        >
                             Remove
                         </a>
 
@@ -170,19 +233,29 @@ AAROHA | Shopping Cart
 
             <div class="cart-summary">
 
-                <h2>Order Summary</h2>
+                <h2>
+                    Order Summary
+                </h2>
+
 
                 <div class="summary-row">
 
-                    <span>Items</span>
+                    <span>
+                        Items
+                    </span>
 
-                    <span>{{ cart_items|length }}</span>
+                    <span>
+                        {{ cart_items|length }}
+                    </span>
 
                 </div>
 
+
                 <div class="summary-row">
 
-                    <span>Subtotal</span>
+                    <span>
+                        Subtotal
+                    </span>
 
                     <span>
                         Rs. {{ total }}
@@ -190,19 +263,28 @@ AAROHA | Shopping Cart
 
                 </div>
 
+
                 <div class="summary-row">
 
-                    <span>Delivery</span>
+                    <span>
+                        Delivery
+                    </span>
 
-                    <span>Calculated at checkout</span>
+                    <span>
+                        Calculated at checkout
+                    </span>
 
                 </div>
 
+
                 <hr>
+
 
                 <div class="summary-total">
 
-                    <span>Total</span>
+                    <span>
+                        Total
+                    </span>
 
                     <strong>
                         Rs. {{ total }}
@@ -210,11 +292,19 @@ AAROHA | Shopping Cart
 
                 </div>
 
-                <a href="{% url 'checkout' %}" class="checkout-button">
+
+                <a
+                    href="{% url 'checkout' %}"
+                    class="checkout-button"
+                >
                     Proceed to Checkout
                 </a>
 
-                <a href="{% url 'products' %}" class="continue-shopping">
+
+                <a
+                    href="{% url 'products' %}"
+                    class="continue-shopping"
+                >
                     ← Continue Shopping
                 </a>
 
@@ -235,13 +325,18 @@ AAROHA | Shopping Cart
                 🛒
             </div>
 
-            <h2>Your Cart is Empty</h2>
+            <h2>
+                Your Cart is Empty
+            </h2>
 
             <p>
                 You haven't added any products to your cart yet.
             </p>
 
-            <a href="{% url 'products' %}" class="continue-shopping-button">
+            <a
+                href="{% url 'products' %}"
+                class="continue-shopping-button"
+            >
                 Start Shopping
             </a>
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
@@ -438,5 +438,171 @@ def manage_order_detail(request, order_id):
         'accounts/manage_order_detail.html',
         {
             'order': order,
+        }
+    )
+
+
+# =========================================================
+# SALES MANAGEMENT
+# =========================================================
+
+@login_required
+def sales_management(request):
+
+    from orders.models import Order
+    from django.db.models import Sum
+    from django.utils import timezone
+    from datetime import datetime
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can access sales
+        if profile.role not in ['owner', 'staff']:
+            return redirect_user_by_role(profile.role)
+
+    # -----------------------------------------------------
+    # GET ALL ORDERS
+    # -----------------------------------------------------
+
+    orders = Order.objects.all().order_by('-created_at')
+
+    # -----------------------------------------------------
+    # TOTAL SALES
+    # -----------------------------------------------------
+
+    total_sales = (
+        Order.objects
+        .exclude(status='Cancelled')
+        .aggregate(
+            total=Sum('total_amount')
+        )['total'] or 0
+    )
+
+    # -----------------------------------------------------
+    # TODAY'S SALES
+    # -----------------------------------------------------
+
+    today = timezone.localdate()
+
+    today_sales = (
+        Order.objects
+        .filter(
+            created_at__date=today
+        )
+        .exclude(status='Cancelled')
+        .aggregate(
+            total=Sum('total_amount')
+        )['total'] or 0
+    )
+
+    # -----------------------------------------------------
+    # THIS MONTH'S SALES
+    # -----------------------------------------------------
+
+    month_start = datetime(
+        today.year,
+        today.month,
+        1
+    )
+
+    month_sales = (
+        Order.objects
+        .filter(
+            created_at__gte=month_start
+        )
+        .exclude(status='Cancelled')
+        .aggregate(
+            total=Sum('total_amount')
+        )['total'] or 0
+    )
+
+    # -----------------------------------------------------
+    # TOTAL ORDERS
+    # -----------------------------------------------------
+
+    total_orders = Order.objects.count()
+
+    # -----------------------------------------------------
+    # CONTEXT
+    # -----------------------------------------------------
+
+    context = {
+        'orders': orders,
+        'total_sales': total_sales,
+        'today_sales': today_sales,
+        'month_sales': month_sales,
+        'total_orders': total_orders,
+    }
+
+    return render(
+        request,
+        'accounts/sales_management.html',
+        context
+    )
+
+
+@login_required
+def sales_detail(request, order_id):
+
+    from orders.models import Order
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can access sales details
+        if profile.role not in ['owner', 'staff']:
+            return redirect_user_by_role(profile.role)
+
+    # -----------------------------------------------------
+    # GET ORDER
+    # -----------------------------------------------------
+
+    order = get_object_or_404(
+        Order,
+        id=order_id
+    )
+
+    # -----------------------------------------------------
+    # PAGE
+    # -----------------------------------------------------
+
+    return render(
+        request,
+        'accounts/sales_detail.html',
+        {
+            'order': order
         }
     )
