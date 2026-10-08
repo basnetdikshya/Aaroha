@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Edit Rider
+{% endblock %}
+
+{% block content %}
+
+<div style="
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div style="
+        margin-bottom: 30px;
+    ">
+
+        <h1 style="
+            margin: 0 0 8px;
+            color: #1F5D42;
+            font-size: 32px;
+        ">
+            Edit Rider
+        </h1>
+
+        <p style="
+            margin: 0;
+            color: #718078;
+            font-size: 15px;
+        ">
+            Update rider account information
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM CARD
+    ====================================================== -->
+
+    <div style="
+        background: #FFFFFF;
+        border: 1px solid #DDE5DF;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 4px 15px rgba(31, 93, 66, 0.06);
+    ">
+
+
+        <!-- RIDER USERNAME -->
+
+        <div style="
+            background: #FAF8F2;
+            border: 1px solid #DDE5DF;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 25px;
+        ">
+
+            <div style="
+                color: #718078;
+                font-size: 12px;
+                margin-bottom: 4px;
+            ">
+                Username
+            </div>
+
+            <div style="
+                color: #26332D;
+                font-size: 15px;
+                font-weight: 600;
+            ">
+                {{ rider.username }}
+            </div>
+
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <!-- =================================================
+                 NAME ROW
+            ================================================== -->
+
+            <div style="
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                margin-bottom: 20px;
+            ">
+
+                <!-- FIRST NAME -->
+
+                <div>
+
+                    <label style="
+                        display: block;
+                        margin-bottom: 7px;
+                        font-weight: 600;
+                        color: #26332D;
+                    ">
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="first_name"
+                        value="{{ rider.first_name }}"
+                        placeholder="Enter first name"
+                        style="
+                            width: 100%;
+                            box-sizing: border-box;
+                            padding: 12px 14px;
+                            border: 1px solid #DDE5DF;
+                            border-radius: 8px;
+                            font-size: 14px;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- LAST NAME -->
+
+                <div>
+
+                    <label style="
+                        display: block;
+                        margin-bottom: 7px;
+                        font-weight: 600;
+                        color: #26332D;
+                    ">
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        name="last_name"
+                        value="{{ rider.last_name }}"
+                        placeholder="Enter last name"
+                        style="
+                            width: 100%;
+                            box-sizing: border-box;
+                            padding: 12px 14px;
+                            border: 1px solid #DDE5DF;
+                            border-radius: 8px;
+                            font-size: 14px;
+                        "
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EMAIL
+            ================================================== -->
+
+            <div style="
+                margin-bottom: 20px;
+            ">
+
+                <label style="
+                    display: block;
+                    margin-bottom: 7px;
+                    font-weight: 600;
+                    color: #26332D;
+                ">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="{{ rider.email }}"
+                    placeholder="Enter email address"
+                    style="
+                        width: 100%;
+                        box-sizing: border-box;
+                        padding: 12px 14px;
+                        border: 1px solid #DDE5DF;
+                        border-radius: 8px;
+                        font-size: 14px;
+                    "
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                 PASSWORD
+            ================================================== -->
+
+            <div style="
+                margin-bottom: 8px;
+            ">
+
+                <label style="
+                    display: block;
+                    margin-bottom: 7px;
+                    font-weight: 600;
+                    color: #26332D;
+                ">
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Leave blank to keep current password"
+                    style="
+                        width: 100%;
+                        box-sizing: border-box;
+                        padding: 12px 14px;
+                        border: 1px solid #DDE5DF;
+                        border-radius: 8px;
+                        font-size: 14px;
+                    "
+                >
+
+            </div>
+
+            <p style="
+                margin: 0 0 30px;
+                color: #718078;
+                font-size: 12px;
+            ">
+                Leave the password field blank if you do not want
+                to change the rider's current password.
+            </p>
+
+
+            <!-- =================================================
+                 BUTTONS
+            ================================================== -->
+
+            <div style="
+                display: flex;
+                gap: 12px;
+                align-items: center;
+            ">
+
+                <button
+                    type="submit"
+                    style="
+                        background: #1F5D42;
+                        color: #FFFFFF;
+                        border: none;
+                        padding: 12px 22px;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    "
+                >
+                    Save Changes
+                </button>
+
+
+                <a
+                    href="{% url 'rider_management' %}"
+                    style="
+                        background: #E8F3EC;
+                        color: #1F5D42;
+                        text-decoration: none;
+                        padding: 12px 22px;
+                        border-radius: 8px;
+                        font-size: 14px;
+                        font-weight: 600;
+                    "
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

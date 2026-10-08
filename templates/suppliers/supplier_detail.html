@@ -11,6 +11,8 @@ AAROHA | Supplier Details
 
     <div class="container">
 
+        <!-- PAGE HEADER -->
+
         <div class="page-header">
 
             <div>
@@ -39,7 +41,11 @@ AAROHA | Supplier Details
         </div>
 
 
+        <!-- SUPPLIER DETAILS -->
+
         <div class="supplier-detail-layout">
+
+            <!-- SUPPLIER CONTACT INFORMATION -->
 
             <div class="supplier-detail-card">
 
@@ -146,6 +152,8 @@ AAROHA | Supplier Details
             </div>
 
 
+            <!-- SUPPLIER INFORMATION -->
+
             <div class="supplier-detail-card">
 
                 <h2>
@@ -218,9 +226,239 @@ AAROHA | Supplier Details
 
         </div>
 
+
+        <!-- =====================================================
+             PURCHASE SUMMARY
+        ====================================================== -->
+
+        <div class="supplier-purchase-section">
+
+            <div class="supplier-purchase-header">
+
+                <div>
+
+                    <span class="section-label">
+                        PURCHASE MANAGEMENT
+                    </span>
+
+                    <h2>
+                        Purchase Summary
+                    </h2>
+
+                    <p>
+                        View purchase activity for this supplier.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- PURCHASE STATISTICS -->
+
+            <div class="supplier-purchase-summary">
+
+                <div class="supplier-purchase-stat">
+
+                    <span>
+                        Total Purchases
+                    </span>
+
+                    <strong>
+                        {{ total_purchases }}
+                    </strong>
+
+                </div>
+
+
+                <div class="supplier-purchase-stat">
+
+                    <span>
+                        Received
+                    </span>
+
+                    <strong>
+                        {{ received_purchases }}
+                    </strong>
+
+                </div>
+
+
+                <div class="supplier-purchase-stat">
+
+                    <span>
+                        Pending
+                    </span>
+
+                    <strong>
+                        {{ pending_purchases }}
+                    </strong>
+
+                </div>
+
+
+                <div class="supplier-purchase-stat">
+
+                    <span>
+                        Total Amount
+                    </span>
+
+                    <strong>
+                        Rs. {{ total_purchase_amount|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PURCHASE HISTORY
+            ================================================== -->
+
+            <div class="supplier-purchase-history">
+
+                <div class="supplier-purchase-history-header">
+
+                    <h2>
+                        Purchase History
+                    </h2>
+
+                </div>
+
+
+                {% if purchases %}
+
+                    <div class="suppliers-table-wrapper">
+
+                        <table class="suppliers-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Purchase
+                                    </th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Total
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Action
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {% for purchase in purchases %}
+
+                                    <tr>
+
+                                        <td>
+
+                                            <strong>
+                                                Purchase #{{ purchase.id }}
+                                            </strong>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            {{ purchase.purchase_date|date:"M d, Y" }}
+
+                                        </td>
+
+
+                                        <td>
+
+                                            Rs. {{ purchase.total_amount|floatformat:2 }}
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <span
+                                                class="supplier-status status-{{ purchase.status|lower }}"
+                                            >
+                                                {{ purchase.status }}
+                                            </span>
+
+                                        </td>
+
+
+                                        <td>
+
+                                            <a
+                                                href="{% url 'purchase_detail' purchase.id %}"
+                                                class="supplier-view-button"
+                                            >
+                                                View
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                {% else %}
+
+                    <!-- EMPTY PURCHASE STATE -->
+
+                    <div class="empty-suppliers">
+
+                        <div class="empty-suppliers-icon">
+                            🛒
+                        </div>
+
+                        <h3>
+                            No Purchases Yet
+                        </h3>
+
+                        <p>
+                            No purchases have been recorded for this supplier.
+                        </p>
+
+                        <a
+                            href="{% url 'add_purchase' %}"
+                            class="primary-button"
+                        >
+                            + Add Purchase
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
     </div>
 
 </section>
 
 {% endblock %}
-

@@ -15,8 +15,12 @@ def login_view(request):
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
 
-        # Empty fields
+        # -----------------------------------------------------
+        # EMPTY FIELDS
+        # -----------------------------------------------------
+
         if not username or not password:
+
             return render(
                 request,
                 'accounts/login.html',
@@ -26,33 +30,9 @@ def login_view(request):
                 }
             )
 
-        # Authenticate user
-        # user = authenticate(
-        #     request,
-        #     username=username,
-        #     password=password
-        # )
-
-        
-
-        # # Wrong username/password
-        # if user is None:
-        #     return render(
-        #         request,
-        #         'accounts/login.html',
-        #         {
-        #             'error': 'Invalid username or password.',
-        #             'username': username,
-        #         }
-        #     )
-
-        # # Login successful
-        # login(request, user)
-
-        # # Superuser = Owner
-        # if user.is_superuser:
-        #     return redirect('owner_dashboard')
-
+        # -----------------------------------------------------
+        # AUTHENTICATE USER
+        # -----------------------------------------------------
 
         user = authenticate(
             request,
@@ -64,7 +44,12 @@ def login_view(request):
         print("Username:", username)
         print("User:", user)
 
+        # -----------------------------------------------------
+        # WRONG USERNAME OR PASSWORD
+        # -----------------------------------------------------
+
         if user is None:
+
             return render(
                 request,
                 'accounts/login.html',
@@ -74,17 +59,47 @@ def login_view(request):
                 }
             )
 
+        # -----------------------------------------------------
+        # CHECK ACCOUNT STATUS
+        # -----------------------------------------------------
+
+        if not user.is_active:
+
+            return render(
+                request,
+                'accounts/login.html',
+                {
+                    'error': 'Your account is inactive. Please contact the administrator.',
+                    'username': username,
+                }
+            )
+
+        # -----------------------------------------------------
+        # LOGIN SUCCESS
+        # -----------------------------------------------------
+
         login(request, user)
 
         print("LOGIN SUCCESS")
         print("Logged in user:", request.user)
 
+        # -----------------------------------------------------
+        # SUPERUSER = OWNER
+        # -----------------------------------------------------
+
         if user.is_superuser:
+
             return redirect('owner_dashboard')
 
-        # Get UserProfile
+        # -----------------------------------------------------
+        # GET USER PROFILE
+        # -----------------------------------------------------
+
         try:
-            profile = UserProfile.objects.get(user=user)
+
+            profile = UserProfile.objects.get(
+                user=user
+            )
 
         except UserProfile.DoesNotExist:
 
@@ -99,26 +114,50 @@ def login_view(request):
                 }
             )
 
-        # Get role
+        # -----------------------------------------------------
+        # GET ROLE
+        # -----------------------------------------------------
+
         role = profile.role
 
-        # Redirect according to role
+        # -----------------------------------------------------
+        # REDIRECT ACCORDING TO ROLE
+        # -----------------------------------------------------
+
         if role == 'owner':
-            return redirect('owner_dashboard')
+
+            return redirect(
+                'owner_dashboard'
+            )
 
         elif role == 'staff':
-            return redirect('staff_dashboard')
+
+            return redirect(
+                'staff_dashboard'
+            )
 
         elif role == 'customer':
-            return redirect('customer_dashboard')
+
+            return redirect(
+                'customer_dashboard'
+            )
 
         elif role == 'supplier':
-            return redirect('supplier_dashboard')
+
+            return redirect(
+                'supplier_dashboard'
+            )
 
         elif role == 'rider':
-            return redirect('rider_dashboard')
 
-        # Invalid role
+            return redirect(
+                'rider_dashboard'
+            )
+
+        # -----------------------------------------------------
+        # INVALID ROLE
+        # -----------------------------------------------------
+
         logout(request)
 
         return render(
@@ -130,7 +169,10 @@ def login_view(request):
             }
         )
 
-    # GET request
+    # ---------------------------------------------------------
+    # GET REQUEST
+    # ---------------------------------------------------------
+
     return render(
         request,
         'accounts/login.html'
@@ -605,4 +647,685 @@ def sales_detail(request, order_id):
         {
             'order': order
         }
+    )
+
+
+# =========================================================
+# CUSTOMER MANAGEMENT
+# =========================================================
+
+@login_required
+def customer_management(request):
+
+    from django.contrib.auth.models import User
+    from django.db.models import Q
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can manage customers
+        if profile.role not in ['owner', 'staff']:
+            return redirect_user_by_role(profile.role)
+
+    # -----------------------------------------------------
+    # GET ALL CUSTOMERS
+    # -----------------------------------------------------
+
+    customers = User.objects.filter(
+        profile__role='customer'
+    ).order_by('-date_joined')
+
+    # -----------------------------------------------------
+    # SEARCH
+    # -----------------------------------------------------
+
+    search_query = request.GET.get(
+        'search',
+        ''
+    ).strip()
+
+    if search_query:
+
+        customers = customers.filter(
+            Q(username__icontains=search_query) |
+            Q(first_name__icontains=search_query) |
+            Q(last_name__icontains=search_query) |
+            Q(email__icontains=search_query)
+        )
+
+    # -----------------------------------------------------
+    # STATUS FILTER
+    # -----------------------------------------------------
+
+    status_filter = request.GET.get(
+        'status',
+        ''
+    ).strip()
+
+    if status_filter == 'active':
+
+        customers = customers.filter(
+            is_active=True
+        )
+
+    elif status_filter == 'inactive':
+
+        customers = customers.filter(
+            is_active=False
+        )
+
+    # -----------------------------------------------------
+    # CONTEXT
+    # -----------------------------------------------------
+
+    context = {
+        'customers': customers,
+        'search_query': search_query,
+        'status_filter': status_filter,
+    }
+
+    # -----------------------------------------------------
+    # RENDER
+    # -----------------------------------------------------
+
+    return render(
+        request,
+        'accounts/customer_management.html',
+        context
+    )
+
+
+# =========================================================
+# CUSTOMER STATUS MANAGEMENT
+# =========================================================
+
+@login_required
+def toggle_customer_status(request, customer_id):
+
+    from django.contrib.auth.models import User
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can change customer status
+        if profile.role not in ['owner', 'staff']:
+            return redirect_user_by_role(profile.role)
+
+    # -----------------------------------------------------
+    # GET CUSTOMER
+    # -----------------------------------------------------
+
+    customer = get_object_or_404(
+        User,
+        id=customer_id
+    )
+
+    # -----------------------------------------------------
+    # MAKE SURE USER IS A CUSTOMER
+    # -----------------------------------------------------
+
+    try:
+
+        profile = UserProfile.objects.get(
+            user=customer
+        )
+
+    except UserProfile.DoesNotExist:
+
+        return redirect('customer_management')
+
+    if profile.role != 'customer':
+
+        return redirect('customer_management')
+
+    # -----------------------------------------------------
+    # TOGGLE STATUS
+    # -----------------------------------------------------
+
+    customer.is_active = not customer.is_active
+
+    customer.save()
+
+    # -----------------------------------------------------
+    # RETURN TO CUSTOMER MANAGEMENT
+    # -----------------------------------------------------
+
+    return redirect('customer_management')
+
+
+# =========================================================
+# CUSTOMER DETAIL
+# =========================================================
+
+@login_required
+def customer_detail(request, user_id):
+
+    from django.contrib.auth.models import User
+    from orders.models import Order
+    from django.db.models import Sum
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can view customer details
+        if profile.role not in ['owner', 'staff']:
+            return redirect_user_by_role(profile.role)
+
+    # -----------------------------------------------------
+    # GET CUSTOMER
+    # -----------------------------------------------------
+
+    customer = get_object_or_404(
+        User,
+        id=user_id,
+        profile__role='customer'
+    )
+
+    # -----------------------------------------------------
+    # CUSTOMER ORDERS
+    # -----------------------------------------------------
+
+    orders = Order.objects.filter(
+        user=customer
+    ).order_by('-created_at')
+
+    # -----------------------------------------------------
+    # CUSTOMER STATISTICS
+    # -----------------------------------------------------
+
+    total_orders = orders.count()
+
+    delivered_orders = orders.filter(
+        status='Delivered'
+    ).count()
+
+    pending_orders = orders.filter(
+        status='Pending'
+    ).count()
+
+    total_spent = (
+        orders.exclude(
+            status='Cancelled'
+        ).aggregate(
+            total=Sum('total_amount')
+        )['total'] or 0
+    )
+
+    # -----------------------------------------------------
+    # CONTEXT
+    # -----------------------------------------------------
+
+    context = {
+        'customer': customer,
+        'orders': orders,
+        'total_orders': total_orders,
+        'delivered_orders': delivered_orders,
+        'pending_orders': pending_orders,
+        'total_spent': total_spent,
+    }
+
+    return render(
+        request,
+        'accounts/customer_detail.html',
+        context
+    )
+
+
+# =========================================================
+# RIDER MANAGEMENT
+# =========================================================
+
+@login_required
+def rider_management(request):
+
+    from django.contrib.auth.models import User
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can manage riders
+        if profile.role not in ['owner', 'staff']:
+
+            return redirect_user_by_role(
+                profile.role
+            )
+
+    # -----------------------------------------------------
+    # GET ALL RIDERS
+    # -----------------------------------------------------
+
+    riders = User.objects.filter(
+        profile__role='rider'
+    ).order_by('-date_joined')
+
+    # -----------------------------------------------------
+    # CONTEXT
+    # -----------------------------------------------------
+
+    context = {
+        'riders': riders,
+    }
+
+    # -----------------------------------------------------
+    # RENDER
+    # -----------------------------------------------------
+
+    return render(
+        request,
+        'accounts/rider_management.html',
+        context
+    )
+
+
+# =========================================================
+# ADD RIDER
+# =========================================================
+
+@login_required
+def add_rider(request):
+
+    from django.contrib.auth.models import User
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can add riders
+        if profile.role not in ['owner', 'staff']:
+
+            return redirect_user_by_role(
+                profile.role
+            )
+
+    # -----------------------------------------------------
+    # HANDLE FORM SUBMISSION
+    # -----------------------------------------------------
+
+    if request.method == 'POST':
+
+        username = request.POST.get(
+            'username',
+            ''
+        ).strip()
+
+        first_name = request.POST.get(
+            'first_name',
+            ''
+        ).strip()
+
+        last_name = request.POST.get(
+            'last_name',
+            ''
+        ).strip()
+
+        email = request.POST.get(
+            'email',
+            ''
+        ).strip()
+
+        password = request.POST.get(
+            'password',
+            ''
+        )
+
+        # -------------------------------------------------
+        # REQUIRED FIELDS
+        # -------------------------------------------------
+
+        if not username or not password:
+
+            return render(
+                request,
+                'accounts/add_rider.html',
+                {
+                    'error': 'Username and password are required.',
+                    'username': username,
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                }
+            )
+
+        # -------------------------------------------------
+        # CHECK USERNAME
+        # -------------------------------------------------
+
+        if User.objects.filter(
+            username=username
+        ).exists():
+
+            return render(
+                request,
+                'accounts/add_rider.html',
+                {
+                    'error': 'Username already exists.',
+                    'username': username,
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'email': email,
+                }
+            )
+
+        # -------------------------------------------------
+        # CREATE USER
+        # -------------------------------------------------
+
+        rider = User.objects.create_user(
+            username=username,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            is_active=True
+        )
+
+        # -------------------------------------------------
+        # CREATE RIDER PROFILE
+        # -------------------------------------------------
+
+        UserProfile.objects.create(
+            user=rider,
+            role='rider'
+        )
+
+        # -------------------------------------------------
+        # RETURN TO RIDER MANAGEMENT
+        # -------------------------------------------------
+
+        return redirect(
+            'rider_management'
+        )
+
+    # -----------------------------------------------------
+    # GET REQUEST
+    # -----------------------------------------------------
+
+    return render(
+        request,
+        'accounts/add_rider.html'
+    )
+
+# =========================================================
+# TOGGLE RIDER STATUS
+# =========================================================
+
+@login_required
+def toggle_rider_status(request, rider_id):
+
+    from django.contrib.auth.models import User
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can manage riders
+        if profile.role not in ['owner', 'staff']:
+
+            return redirect_user_by_role(
+                profile.role
+            )
+
+    # -----------------------------------------------------
+    # GET RIDER
+    # -----------------------------------------------------
+
+    rider = get_object_or_404(
+        User,
+        id=rider_id
+    )
+
+    # -----------------------------------------------------
+    # VERIFY RIDER ROLE
+    # -----------------------------------------------------
+
+    try:
+
+        rider_profile = UserProfile.objects.get(
+            user=rider
+        )
+
+    except UserProfile.DoesNotExist:
+
+        return redirect('rider_management')
+
+    if rider_profile.role != 'rider':
+
+        return redirect('rider_management')
+
+    # -----------------------------------------------------
+    # TOGGLE STATUS
+    # -----------------------------------------------------
+
+    rider.is_active = not rider.is_active
+
+    rider.save()
+
+    # -----------------------------------------------------
+    # RETURN TO RIDER MANAGEMENT
+    # -----------------------------------------------------
+
+    return redirect(
+        'rider_management'
+    )
+
+# =========================================================
+# EDIT RIDER
+# =========================================================
+
+@login_required
+def edit_rider(request, rider_id):
+
+    from django.contrib.auth.models import User
+
+    # -----------------------------------------------------
+    # ACCESS CONTROL
+    # -----------------------------------------------------
+
+    if request.user.is_superuser:
+        pass
+
+    else:
+
+        try:
+            profile = UserProfile.objects.get(
+                user=request.user
+            )
+
+        except UserProfile.DoesNotExist:
+
+            logout(request)
+            return redirect('login')
+
+        # Only owner and staff can edit riders
+        if profile.role not in ['owner', 'staff']:
+
+            return redirect_user_by_role(
+                profile.role
+            )
+
+    # -----------------------------------------------------
+    # GET RIDER
+    # -----------------------------------------------------
+
+    rider = get_object_or_404(
+        User,
+        id=rider_id
+    )
+
+    # -----------------------------------------------------
+    # VERIFY RIDER ROLE
+    # -----------------------------------------------------
+
+    try:
+
+        rider_profile = UserProfile.objects.get(
+            user=rider
+        )
+
+    except UserProfile.DoesNotExist:
+
+        return redirect('rider_management')
+
+    if rider_profile.role != 'rider':
+
+        return redirect('rider_management')
+
+    # -----------------------------------------------------
+    # HANDLE FORM SUBMISSION
+    # -----------------------------------------------------
+
+    if request.method == 'POST':
+
+        first_name = request.POST.get(
+            'first_name',
+            ''
+        ).strip()
+
+        last_name = request.POST.get(
+            'last_name',
+            ''
+        ).strip()
+
+        email = request.POST.get(
+            'email',
+            ''
+        ).strip()
+
+        password = request.POST.get(
+            'password',
+            ''
+        )
+
+        # -------------------------------------------------
+        # UPDATE RIDER INFORMATION
+        # -------------------------------------------------
+
+        rider.first_name = first_name
+        rider.last_name = last_name
+        rider.email = email
+
+        # -------------------------------------------------
+        # UPDATE PASSWORD ONLY IF ENTERED
+        # -------------------------------------------------
+
+        if password:
+
+            rider.set_password(password)
+
+        rider.save()
+
+        # -------------------------------------------------
+        # RETURN TO RIDER MANAGEMENT
+        # -------------------------------------------------
+
+        return redirect(
+            'rider_management'
+        )
+
+    # -----------------------------------------------------
+    # DISPLAY EDIT FORM
+    # -----------------------------------------------------
+
+    context = {
+        'rider': rider,
+    }
+
+    return render(
+        request,
+        'accounts/edit_rider.html',
+        context
     )

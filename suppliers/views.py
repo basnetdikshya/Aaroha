@@ -115,12 +115,44 @@ def supplier_detail(request, pk):
         pk=pk
     )
 
+    from purchases.models import Purchase
+    from django.db.models import Sum
+
+    purchases = (
+        Purchase.objects
+        .filter(supplier=supplier)
+        .order_by('-purchase_date', '-id')
+    )
+
+    total_purchases = purchases.count()
+
+    received_purchases = purchases.filter(
+        status='Received'
+    ).count()
+
+    pending_purchases = purchases.filter(
+        status='Pending'
+    ).count()
+
+    total_purchase_amount = (
+        purchases.aggregate(
+            total=Sum('total_amount')
+        )['total'] or 0
+    )
+
+    context = {
+        'supplier': supplier,
+        'purchases': purchases,
+        'total_purchases': total_purchases,
+        'received_purchases': received_purchases,
+        'pending_purchases': pending_purchases,
+        'total_purchase_amount': total_purchase_amount,
+    }
+
     return render(
         request,
         'suppliers/supplier_detail.html',
-        {
-            'supplier': supplier
-        }
+        context
     )
 
 

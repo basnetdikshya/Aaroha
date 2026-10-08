@@ -1,0 +1,486 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Customer Management
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="section-label">
+                    CUSTOMER MANAGEMENT
+                </span>
+
+                <h1>
+                    Customers
+                </h1>
+
+                <p>
+                    Manage registered customers and their information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             CUSTOMER DIRECTORY
+        ====================================================== -->
+
+        <div class="supplier-management-card">
+
+            <div class="supplier-management-header">
+
+                <div>
+
+                    <h2>
+                        Customer Directory
+                    </h2>
+
+                    <p>
+                        View and manage registered customers.
+                    </p>
+
+                </div>
+
+
+                <!-- CUSTOMER COUNT -->
+
+                <div class="suppliers-count">
+
+                    {{ customers|length }}
+
+                    Customer{{ customers|length|pluralize }}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SEARCH AND FILTER
+            ================================================== -->
+
+            <form
+                method="GET"
+                action="{% url 'customer_management' %}"
+                style="
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    width: 100%;
+                    margin-bottom: 24px;
+                    flex-wrap: wrap;
+                "
+            >
+
+                <!-- SEARCH -->
+
+                <div
+                    style="
+                        flex: 1;
+                        min-width: 240px;
+                    "
+                >
+
+                    <input
+                        type="text"
+                        name="search"
+                        value="{{ search_query }}"
+                        placeholder="Search by username, name or email..."
+                        style="
+                            width: 100%;
+                            padding: 12px 14px;
+                            border: 1px solid #DDE5DF;
+                            border-radius: 8px;
+                            background: #FFFFFF;
+                            color: #26332D;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                            outline: none;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- STATUS FILTER -->
+
+                <div>
+
+                    <select
+                        name="status"
+                        style="
+                            min-width: 160px;
+                            padding: 12px 14px;
+                            border: 1px solid #DDE5DF;
+                            border-radius: 8px;
+                            background: #FFFFFF;
+                            color: #26332D;
+                            font-size: 14px;
+                            box-sizing: border-box;
+                            cursor: pointer;
+                        "
+                    >
+
+                        <option
+                            value=""
+                            {% if status_filter == '' %}
+                                selected
+                            {% endif %}
+                        >
+                            All Status
+                        </option>
+
+
+                        <option
+                            value="active"
+                            {% if status_filter == 'active' %}
+                                selected
+                            {% endif %}
+                        >
+                            Active
+                        </option>
+
+
+                        <option
+                            value="inactive"
+                            {% if status_filter == 'inactive' %}
+                                selected
+                            {% endif %}
+                        >
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH BUTTON -->
+
+                <button
+                    type="submit"
+                    style="
+                        padding: 12px 20px;
+                        border: none;
+                        border-radius: 8px;
+                        background: #1F5D42;
+                        color: #FFFFFF;
+                        font-size: 14px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    "
+                >
+                    Search
+                </button>
+
+
+                <!-- CLEAR BUTTON -->
+
+                <a
+                    href="{% url 'customer_management' %}"
+                    style="
+                        padding: 12px 20px;
+                        border: 1px solid #DDE5DF;
+                        border-radius: 8px;
+                        background: #FFFFFF;
+                        color: #26332D;
+                        font-size: 14px;
+                        font-weight: 600;
+                        text-decoration: none;
+                        box-sizing: border-box;
+                    "
+                >
+                    Clear
+                </a>
+
+            </form>
+
+
+            <!-- =================================================
+                 CUSTOMER TABLE
+            ================================================== -->
+
+            {% if customers %}
+
+                <div class="suppliers-table-wrapper">
+
+                    <table class="suppliers-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Username
+                                </th>
+
+                                <th>
+                                    Name
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Joined
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for customer in customers %}
+
+                                <tr>
+
+                                    <!-- =================================
+                                         USERNAME
+                                    ================================== -->
+
+                                    <td>
+
+                                        <strong>
+                                            {{ customer.username }}
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- =================================
+                                         NAME
+                                    ================================== -->
+
+                                    <td>
+
+                                        {% if customer.get_full_name %}
+
+                                            {{ customer.get_full_name }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- =================================
+                                         EMAIL
+                                    ================================== -->
+
+                                    <td>
+
+                                        {% if customer.email %}
+
+                                            {{ customer.email }}
+
+                                        {% else %}
+
+                                            —
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- =================================
+                                         JOINED DATE
+                                    ================================== -->
+
+                                    <td>
+
+                                        {{ customer.date_joined|date:"M d, Y" }}
+
+                                    </td>
+
+
+                                    <!-- =================================
+                                         STATUS
+                                    ================================== -->
+
+                                    <td>
+
+                                        {% if customer.is_active %}
+
+                                            <span class="supplier-status status-active">
+                                                Active
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="supplier-status status-inactive">
+                                                Inactive
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- =================================
+                                         ACTIONS
+                                    ================================== -->
+
+                                    <td>
+
+                                        <div
+                                            class="supplier-actions"
+                                            style="
+                                                display: flex;
+                                                align-items: center;
+                                                gap: 8px;
+                                                flex-wrap: wrap;
+                                            "
+                                        >
+
+                                            <!-- VIEW -->
+
+                                            <a
+                                                href="{% url 'customer_detail' customer.id %}"
+                                                class="supplier-view-button"
+                                            >
+                                                View
+                                            </a>
+
+
+                                            <!-- CHANGE STATUS -->
+
+                                            <form
+                                                method="POST"
+                                                action="{% url 'toggle_customer_status' customer.id %}"
+                                                style="margin: 0;"
+                                            >
+
+                                                {% csrf_token %}
+
+
+                                                {% if customer.is_active %}
+
+                                                    <!-- DEACTIVATE -->
+
+                                                    <button
+                                                        type="submit"
+                                                        style="
+                                                            padding: 8px 12px;
+                                                            border: 1px solid #D9534F;
+                                                            border-radius: 8px;
+                                                            background: #FFFFFF;
+                                                            color: #D9534F;
+                                                            font-size: 13px;
+                                                            font-weight: 600;
+                                                            cursor: pointer;
+                                                        "
+                                                    >
+                                                        Deactivate
+                                                    </button>
+
+                                                {% else %}
+
+                                                    <!-- ACTIVATE -->
+
+                                                    <button
+                                                        type="submit"
+                                                        style="
+                                                            padding: 8px 12px;
+                                                            border: 1px solid #2E8B57;
+                                                            border-radius: 8px;
+                                                            background: #FFFFFF;
+                                                            color: #2E8B57;
+                                                            font-size: 13px;
+                                                            font-weight: 600;
+                                                            cursor: pointer;
+                                                        "
+                                                    >
+                                                        Activate
+                                                    </button>
+
+                                                {% endif %}
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+                <!-- =================================================
+                     EMPTY CUSTOMER STATE
+                ================================================== -->
+
+                <div class="empty-suppliers">
+
+                    <div class="empty-suppliers-icon">
+                        👤
+                    </div>
+
+
+                    <h3>
+                        No Customers Found
+                    </h3>
+
+
+                    {% if search_query or status_filter %}
+
+                        <p>
+                            No customers match your current search or filter.
+                        </p>
+
+                    {% else %}
+
+                        <p>
+                            No customer accounts have been registered yet.
+                        </p>
+
+                    {% endif %}
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

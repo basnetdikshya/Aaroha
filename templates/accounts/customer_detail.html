@@ -1,0 +1,536 @@
+{% extends 'base.html' %}
+
+{% block title %}
+AAROHA | Customer Detail
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page-section">
+
+    <div class="container">
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="section-label">
+                    CUSTOMER MANAGEMENT
+                </span>
+
+                <h1>
+                    Customer Detail
+                </h1>
+
+                <p>
+                    View customer information and order history.
+                </p>
+
+            </div>
+
+
+            <div>
+
+                <a
+                    href="{% url 'customer_management' %}"
+                    class="supplier-view-button"
+                >
+                    ← Back to Customers
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             CUSTOMER INFORMATION
+        ====================================================== -->
+
+        <div class="supplier-management-card">
+
+            <div class="supplier-management-header">
+
+                <div>
+
+                    <h2>
+
+                        {% if customer.get_full_name %}
+
+                            {{ customer.get_full_name }}
+
+                        {% else %}
+
+                            {{ customer.username }}
+
+                        {% endif %}
+
+                    </h2>
+
+                    <p>
+                        Customer Account Information
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    {% if customer.is_active %}
+
+                        <span class="supplier-status status-active">
+                            Active
+                        </span>
+
+                    {% else %}
+
+                        <span class="supplier-status status-inactive">
+                            Inactive
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CUSTOMER DETAILS
+            ================================================== -->
+
+            <div class="customer-details-grid">
+
+                <!-- USERNAME -->
+
+                <div class="customer-detail-item">
+
+                    <span class="customer-detail-label">
+                        Username
+                    </span>
+
+                    <strong>
+                        {{ customer.username }}
+                    </strong>
+
+                </div>
+
+
+                <!-- FULL NAME -->
+
+                <div class="customer-detail-item">
+
+                    <span class="customer-detail-label">
+                        Full Name
+                    </span>
+
+                    <strong>
+
+                        {% if customer.get_full_name %}
+
+                            {{ customer.get_full_name }}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="customer-detail-item">
+
+                    <span class="customer-detail-label">
+                        Email
+                    </span>
+
+                    <strong>
+
+                        {% if customer.email %}
+
+                            {{ customer.email }}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </strong>
+
+                </div>
+
+
+                <!-- JOINED DATE -->
+
+                <div class="customer-detail-item">
+
+                    <span class="customer-detail-label">
+                        Joined
+                    </span>
+
+                    <strong>
+                        {{ customer.date_joined|date:"M d, Y" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             CUSTOMER STATISTICS
+        ====================================================== -->
+
+        <div
+            style="
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                gap: 20px;
+                width: 100%;
+                margin: 24px 0;
+                box-sizing: border-box;
+            "
+        >
+
+            <!-- =================================================
+                 TOTAL ORDERS
+            ================================================== -->
+
+            <div
+                style="
+                    background: #FFFFFF;
+                    border: 1px solid #DDE5DF;
+                    border-radius: 12px;
+                    padding: 24px;
+                    min-height: 120px;
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 10px;
+                "
+            >
+
+                <span
+                    style="
+                        display: block;
+                        font-size: 14px;
+                        line-height: 1.4;
+                        color: #718078;
+                        font-weight: 500;
+                    "
+                >
+                    Total Orders
+                </span>
+
+                <strong
+                    style="
+                        display: block;
+                        font-size: 28px;
+                        line-height: 1.2;
+                        color: #1F5D42;
+                        font-weight: 700;
+                    "
+                >
+                    {{ total_orders }}
+                </strong>
+
+            </div>
+
+
+            <!-- =================================================
+                 PENDING ORDERS
+            ================================================== -->
+
+            <div
+                style="
+                    background: #FFFFFF;
+                    border: 1px solid #DDE5DF;
+                    border-radius: 12px;
+                    padding: 24px;
+                    min-height: 120px;
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 10px;
+                "
+            >
+
+                <span
+                    style="
+                        display: block;
+                        font-size: 14px;
+                        line-height: 1.4;
+                        color: #718078;
+                        font-weight: 500;
+                    "
+                >
+                    Pending Orders
+                </span>
+
+                <strong
+                    style="
+                        display: block;
+                        font-size: 28px;
+                        line-height: 1.2;
+                        color: #1F5D42;
+                        font-weight: 700;
+                    "
+                >
+                    {{ pending_orders }}
+                </strong>
+
+            </div>
+
+
+            <!-- =================================================
+                 DELIVERED ORDERS
+            ================================================== -->
+
+            <div
+                style="
+                    background: #FFFFFF;
+                    border: 1px solid #DDE5DF;
+                    border-radius: 12px;
+                    padding: 24px;
+                    min-height: 120px;
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 10px;
+                "
+            >
+
+                <span
+                    style="
+                        display: block;
+                        font-size: 14px;
+                        line-height: 1.4;
+                        color: #718078;
+                        font-weight: 500;
+                    "
+                >
+                    Delivered Orders
+                </span>
+
+                <strong
+                    style="
+                        display: block;
+                        font-size: 28px;
+                        line-height: 1.2;
+                        color: #1F5D42;
+                        font-weight: 700;
+                    "
+                >
+                    {{ delivered_orders }}
+                </strong>
+
+            </div>
+
+
+            <!-- =================================================
+                 TOTAL SPENT
+            ================================================== -->
+
+            <div
+                style="
+                    background: #FFFFFF;
+                    border: 1px solid #DDE5DF;
+                    border-radius: 12px;
+                    padding: 24px;
+                    min-height: 120px;
+                    box-sizing: border-box;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 10px;
+                "
+            >
+
+                <span
+                    style="
+                        display: block;
+                        font-size: 14px;
+                        line-height: 1.4;
+                        color: #718078;
+                        font-weight: 500;
+                    "
+                >
+                    Total Spent
+                </span>
+
+                <strong
+                    style="
+                        display: block;
+                        font-size: 28px;
+                        line-height: 1.2;
+                        color: #1F5D42;
+                        font-weight: 700;
+                    "
+                >
+                    Rs. {{ total_spent }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             ORDER HISTORY
+        ====================================================== -->
+
+        <div class="supplier-management-card">
+
+            <div class="supplier-management-header">
+
+                <div>
+
+                    <h2>
+                        Order History
+                    </h2>
+
+                    <p>
+                        Orders placed by this customer.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if orders %}
+
+                <!-- ORDER TABLE -->
+
+                <div class="suppliers-table-wrapper">
+
+                    <table class="suppliers-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Order
+                                </th>
+
+                                <th>
+                                    Date
+                                </th>
+
+                                <th>
+                                    Total
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for order in orders %}
+
+                                <tr>
+
+                                    <!-- ORDER ID -->
+
+                                    <td>
+
+                                        <strong>
+                                            #{{ order.id }}
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- DATE -->
+
+                                    <td>
+
+                                        {{ order.created_at|date:"M d, Y" }}
+
+                                    </td>
+
+
+                                    <!-- TOTAL -->
+
+                                    <td>
+
+                                        Rs. {{ order.total_amount }}
+
+                                    </td>
+
+
+                                    <!-- STATUS -->
+
+                                    <td>
+
+                                        <span class="supplier-status">
+
+                                            {{ order.status }}
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            {% else %}
+
+                <!-- EMPTY ORDER STATE -->
+
+                <div class="empty-suppliers">
+
+                    <div class="empty-suppliers-icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        No Orders Yet
+                    </h3>
+
+                    <p>
+                        This customer has not placed any orders yet.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
